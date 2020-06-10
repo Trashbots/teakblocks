@@ -7,16 +7,13 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-ble-central": {
-      "PACKAGE_NAME": "co.trashbots.tblocks"
-    },
-    "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "co.trashbots.tblocks"
-    },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "co.trashbots.tblocks"
     },
     "phonegap-plugin-mobile-accessibility": {
+      "PACKAGE_NAME": "co.trashbots.tblocks"
+    },
+    "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "co.trashbots.tblocks"
     },
     "cordova-plugin-ios-ble-permissions": {
@@ -26,6 +23,9 @@
       "PACKAGE_NAME": "co.trashbots.tblocks"
     },
     "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "co.trashbots.tblocks"
+    },
+    "cordova-plugin-ble": {
       "PACKAGE_NAME": "co.trashbots.tblocks"
     }
   },
