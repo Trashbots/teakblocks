@@ -294,13 +294,13 @@ module.exports = function () {
       val = variables.get(d.variable);
     } else if (d.print === 'sensor') {
       console.log('sensor------');
-      if(d.sensor === 'accel') {
+      if(d.sensor === 'accelerometer') {
         val = cxn.accelerometer;
-      } else if (d.sensor === 'temp') {
+      } else if (d.sensor === 'temperature') {
         val = cxn.temperature;
       }
     }
-    console.log('conductor print', d.print, d.variable, val);
+    console.log('conductor print', d.print, d.variable, d.sensor, val);
     return val;
   };
 
