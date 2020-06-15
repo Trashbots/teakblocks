@@ -181,7 +181,7 @@ module.exports = function () {
   dso.sorryCantDoIt = function() {
     var tb = new tbot.Class(dso.tbotGroup, 100, 20, '-----', icons.sad55);
     dso.tbotGroup = dso.svg.appendChild(svgb.createGroup('', 0, 0));
-    var message = 'Can not access Bluetooth (BLE)'
+    var message = 'Cannot access Bluetooth (BLE)'
     dso.tbotGroup.appendChild(svgb.createText('svg-clear tbot-device-name', 450, 95, message));
   };
 
