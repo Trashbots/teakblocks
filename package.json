@@ -44,6 +44,7 @@
     "clipboard": "^1.6.0",
     "cordova-ios": "^6.0.0",
     "cordova-osx": "^5.0.0",
+    "cordova-plugin-bluetoothle": "^4.5.11",
     "font-awesome": "^4.6.3",
     "interact.js": "^1.2.6",
     "ios-deploy": "^1.10.0",

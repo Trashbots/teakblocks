@@ -23,6 +23,7 @@
         "cordova-ios": "^5.1.1",
         "cordova-osx": "^4.0.2",
         "cordova-plugin-ble": "^2.0.1",
+        "cordova-plugin-ble-central": "^1.2.5",
         "cordova-plugin-device": "git+https://github.com/apache/cordova-plugin-device.git",
         "cordova-plugin-ios-ble-permissions": "^1.0.1",
         "cordova-plugin-ios-longpress-fix": "^1.1.0",
