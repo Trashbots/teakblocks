@@ -217,7 +217,7 @@ module.exports = function () {
         }
       }
     }
-    conductor.sensorTimer = setTimeout(function() { conductor.checkSensorIdentity(block); }, 500);
+    conductor.sensorTimer = setTimeout(function() { conductor.checkSensorIdentity(block); }, 50);
   };
 
   // Stop all running chains.
