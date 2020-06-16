@@ -237,6 +237,10 @@ module.exports = function () {
       dso.watch.dispose();
       dso.watch = null;
     }
+
+    var botName = dso.deviceName;
+    var message = '(version)';
+    cxn.write(botName, message);
   };
 
   dso.tryConnect = function(tb) {

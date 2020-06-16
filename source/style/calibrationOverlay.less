@@ -1,0 +1,47 @@
+// calibration screen (also the about box)
+#calibrationOverlay {
+    width:100%;
+    height:100%;
+    background-color: @overlay-splash-background-border;
+    -ms-touch-action: none;
+    touch-action: none;
+    /* prevent text from being selected browser style */
+    user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+#calibrationDialog {
+  position: absolute;
+  left:10%;
+  top:4%;
+  width:75%;
+  padding:10px;
+  padding-left: 20px;
+  padding-top: 20px;
+  background-color: @overlay-splash-background;
+  border-radius: 12px;
+  border: 10px solid @overlay-splash-outline;
+  overflow: hidden;
+}
+.calibration-title {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-size:24px;
+  font-weight: bold;
+  font-family: @app-font;
+}
+.calibration-body {
+  margin: 0px;
+  font-family: @app-font;
+}
+.calibration-button {
+  width:200px;
+  border: 2px solid @overlay-splash-outline;
+  background-color: @overlay-splash-outline;
+}
+.calibration-button:active {
+  border: 2px solid @overlay-button-active;
+  background-color: @overlay-button-active;
+}

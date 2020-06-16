@@ -51,7 +51,8 @@ module.exports = function factory(){
       robot: '\uf544',
       temp: '\uf2c9',
       loop: '\uf2ea',
-      data: '\uf080'
+      data: '\uf080',
+      calibrate: '\uf24e'
     };
 
     return fastr;

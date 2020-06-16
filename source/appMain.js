@@ -181,6 +181,7 @@ module.exports = function () {
         var currentDocText = app.teaktext.blocksToText(tbe.forEachDiagramChain);
         app.storage.setItem(tbe.currentDoc, currentDocText);
       },
+      'calibrate': 'calibrationOverlay'
     };
 
     // Construct the clipboard
@@ -225,7 +226,7 @@ module.exports = function () {
      {'alignment': 'M', 'label': fastr.debug, 'command': 'debugOverlay'},
      {'alignment': 'M', 'label': fastr.file, 'command': 'pages', 'sub':buttonsPages},
      {'alignment': 'M', 'label': fastr.edit, 'command': 'edit', 'sub':buttonsEdit},
-     // {'alignment': 'M', 'position': 4, 'label': fastr.camera, 'command': 'docSnapShot'},
+     {'alignment': 'M', 'label': fastr.calibrate, 'command': 'calibrate'},
      {'alignment': 'R', 'label': '', 'command': 'deviceScanOverlay'},
     ];
 

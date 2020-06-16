@@ -33,6 +33,7 @@ module.exports = function factory(){
   cxn.temp = 0;
   cxn.connectingTimeout = 0;
   cxn.hostSelectedName = "";
+  cxn.calibrating = false;
 
   cxn.accelerometer = null;
   cxn.temperature = null;
@@ -432,6 +433,9 @@ cxn.onData = function(name, data) {
       var tempData = str.substring(6, str.length - 1);
       var fData = (1.8*parseInt(tempData, 10))+32;
       cxn.temperature = fData;
+    } else if(str.includes('version')){
+      cxn.versionNumber = str.substring(9, str.length-1);
+      console.log('version number:', cxn.versionNumber);
     }
   } catch(error) {
     log.trace('execption in BLE onData', error);

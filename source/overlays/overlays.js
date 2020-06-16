@@ -46,6 +46,7 @@ module.exports = function () {
       screens.deviceScanOverlay = require('./deviceScanOverlay.js');
       screens.fileOverlay = require('./fileOverlay.js');
       screens.splashOverlay = require('./splashOverlay.js');
+      screens.calibrationOverlay = require('./calibrationOverlay.js');
       overlays.screens = screens;
 
       return overlays;
