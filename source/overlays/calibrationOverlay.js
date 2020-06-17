@@ -51,9 +51,11 @@ module.exports = function(){
             </div>
         </div>`);
 
+    var caliArea = document.getElementById('calibration-button-area');
 
-    if(!(cxn.versionNumber >= 10)){
-      var caliArea = document.getElementById('calibration-button-area');
+    if(cxn.connectionStatus(dso.deviceName) !== 3){
+      caliArea.innerHTML = "<p style='font-style: italic;' class='calibration-body calibration-text'>Smart Steering Calibration not supported. Please connect a Trashbot.</p>";
+    } else if (!(cxn.versionNumber >= 10)){
       caliArea.innerHTML = "<p style='font-style: italic;' class='calibration-body calibration-text'>Smart Steering Calibration not supported. Please update Trashbot. Refer to trashbots.co/updating-your-bot for instructions.</p>";
     } else {
       var activateButton = document.getElementById('calibration-activate');

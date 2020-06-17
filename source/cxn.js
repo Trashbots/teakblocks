@@ -308,6 +308,7 @@ cxn.onDisconnectAppBLE = function(info) {
   var botName = cxn.bleNameToBotName(info.name);
   cxn.setConnectionStatus(botName, cxn.statusEnum.NOT_THERE);
   cxn.cullList();
+  cxn.versionNumber = null;
 };
 
 cxn.onDisconnecWebBLE = function(event) {
@@ -315,6 +316,7 @@ cxn.onDisconnecWebBLE = function(event) {
   var botName = cxn.bleNameToBotName(event.target.name);
   cxn.setConnectionStatus(botName, cxn.statusEnum.NOT_THERE);
   cxn.cullList();
+  cxn.versionNumber = null;
 };
 
 // Determine the status of a named connection.
