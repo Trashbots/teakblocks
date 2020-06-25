@@ -52,7 +52,12 @@ module.exports = function factory(){
       temp: '\uf2c9',
       loop: '\uf2ea',
       data: '\uf080',
-      calibrate: '\uf24e'
+      calibrate: '\uf24e',
+      batteryFull: '\uf240',
+      batteryThreeQuarters: '\uf241',
+      batteryHalf: '\uf242',
+      batteryOneQuarter: '\uf243',
+      batteryEmpty: '\uf244'
     };
 
     return fastr;

@@ -33,6 +33,12 @@ module.exports = function () {
   var deviceScanOverlay = {};
   var dso = deviceScanOverlay;
 
+
+  const fullThreshold = (75+100)/2
+  const threeQuartersThreshold = (50+75)/2
+  const halfThreshold = (25+50)/2
+  const oneQuarterThreshold = (25)/2
+
   dso.nonName = '-?-';
   dso.tbots = {};
   dso.deviceName = dso.nonName;
@@ -44,8 +50,40 @@ module.exports = function () {
     }
   };
 
+
+  
+
+  dso.getBattery = function()
+  {
+    let percent = cxn.batteryPercent
+    if (dso.deviceName === dso.nonName)
+    {
+      return fastr.robot
+    }
+    else if (percent > fullThreshold)
+    {
+      return fastr.batteryFull
+    }
+    else if (percent > threeQuartersThreshold)
+    {
+      return fastr.batteryThreeQuarters
+    }
+    else if (percent > halfThreshold)
+    {
+      return fastr.batteryHalf
+    }
+    else if (percent > oneQuarterThreshold)
+    {
+      return fastr.batteryOneQuarter
+    }
+    else {
+      return fastr.batteryEmpty
+    }
+  }
+
   dso.decoratedName = function() {
-    return fastr.robot + '  ' + dso.deviceName;
+    //console.log(fastr.robot + '  ' + dso.deviceName)
+    return dso.getBattery() + '  ' + dso.deviceName
   };
 
   dso.updateScreenName = function(botName) {
