@@ -96,12 +96,9 @@ module.exports = function(){
     if(!cxn.calibrated){
       cxn.calibrated = true;
       var botName = dso.deviceName;
-      var message = '(calibrate)';
+      var message = '(cl)';
       
-      if (cxn.write(botName, message))
-      {
-        cxn.calibrating = true;
-      }
+      cxn.write(botName, message)
     }
   };
 

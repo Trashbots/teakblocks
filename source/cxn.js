@@ -423,7 +423,7 @@ cxn.onData = function(name, data) {
     var str = bufferToString(data);
     //  log.trace('On Data:', name, str);
     cxn.messages.push(name + ':' + str);
-    if(str.includes('accel')){
+    if(str.includes('ac')){
       var accelData = str.substring(7, str.length - 1);
       cxn.accelerometer = parseInt(accelData, 10)/20;
     } else if(str.includes('(a)')){
@@ -434,17 +434,26 @@ cxn.onData = function(name, data) {
       cxn.buttonAB = true;
     } else if(str.includes('compass')){
       cxn.compass = str.substring(9, str.length - 2);
-    } else if(str.includes('temp')){
+    } else if(str.includes('tp')){
       var tempData = str.substring(6, str.length - 1);
       var fData = (1.8*parseInt(tempData, 10))+32;
       cxn.temperature = fData;
-    } else if(str.includes('version')){
+    } else if(str.includes('vs')){
       cxn.versionNumber = str.substring(9, str.length-1);
       console.log('version number:', cxn.versionNumber);
     }
-    else if (str.includes('battery'))
+    else if (str.includes('bt'))
     {
       cxn.batteryPercent = str.substring(8, str.length-1);
+    }
+    else if (str.includes('cs'))
+    {
+      cxn.calibrating = true;
+    }
+    else if (str.includes('cf'))
+    {
+      cxn.calibrating = false;
+      cxn.calibrated = true;
     }
   } catch(error) {
     log.trace('execption in BLE onData', error);
@@ -463,7 +472,6 @@ cxn.onError = function(reason) {
 
 cxn.write = function(name, message) {
   console.log(cxn.calibrating);
-  if (!cxn.calibrating) {
     try {
       if (cxn.devices.hasOwnProperty(name)) {
         var mac = cxn.devices[name].mac;
@@ -483,6 +491,7 @@ cxn.write = function(name, message) {
           if (cxn.webBLEWrite) {
             cxn.webBLEWrite.writeValue(buffer)
             .then(function() {
+
               //log.trace('write succeded', message);
             })
             .catch(function() {
@@ -496,8 +505,6 @@ cxn.write = function(name, message) {
     } catch(error) {
       log.trace('execption in BLE Write', error);
     }
-  }
-  return true
 };
 
 cxn.onWriteOK = function (data) {

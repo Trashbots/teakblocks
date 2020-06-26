@@ -56,11 +56,11 @@ module.exports = function () {
   dso.getBattery = function()
   {
     let percent = cxn.batteryPercent
-    if (dso.deviceName === dso.nonName)
+    /*if (dso.deviceName === dso.nonName)
     {
       return fastr.robot
     }
-    else if (percent > fullThreshold)
+    else */if (percent > fullThreshold)
     {
       return fastr.batteryFull
     }
@@ -277,7 +277,7 @@ module.exports = function () {
     }
 
     var botName = dso.deviceName;
-    var message = '(version)';
+    var message = '(vs)';
     cxn.write(botName, message);
   };
 
