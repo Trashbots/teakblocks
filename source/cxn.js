@@ -462,16 +462,16 @@ cxn.onError = function(reason) {
 };
 
 cxn.write = function(name, message) {
-  if (!cxn.calibrating)
-  {
+  console.log(cxn.calibrating);
+  if (!cxn.calibrating) {
     try {
       if (cxn.devices.hasOwnProperty(name)) {
         var mac = cxn.devices[name].mac;
         var buffer = stringToBuffer(message);
-  
+
         if (cxn.appBLE) {
           buffer = stringToBuffer(message);
-  
+
           // Break the message into smaller sections.
           cxn.appBLE.write(mac,
             nordicUARTservice.serviceUUID,
@@ -485,7 +485,7 @@ cxn.write = function(name, message) {
             .then(function() {
               //log.trace('write succeded', message);
             })
-            .catch(function(error) {
+            .catch(function() {
               //log.trace('write failed', message, error);
               setTimeout(cxn.write(name, message), 50);
             });

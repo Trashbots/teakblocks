@@ -97,12 +97,14 @@ module.exports = function(){
       cxn.calibrated = true;
       var botName = dso.deviceName;
       var message = '(calibrate)';
-
       cxn.write(botName, message);
+
+      cxn.calibrating = true;
     }
   };
 
   calibrationOverlay.exit = function () {
+    cxn.calibrating = false;
     //overlays.hideOverlay(null);
   };
 
