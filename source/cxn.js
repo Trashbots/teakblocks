@@ -41,7 +41,7 @@ module.exports = function factory(){
   cxn.buttonA = null;
   cxn.buttonB = null;
   cxn.buttonAB = null;
-
+  cxn.batteryPercent = 50
 // State enumeration for conections.
 cxn.statusEnum = {
   NOT_THERE : 0,
@@ -442,6 +442,10 @@ cxn.onData = function(name, data) {
       cxn.versionNumber = str.substring(9, str.length-1);
       console.log('version number:', cxn.versionNumber);
     }
+    else if (str.includes('battery'))
+    {
+      cxn.batteryPercent = str.substring(8, str.length-1);
+    }
   } catch(error) {
     log.trace('execption in BLE onData', error);
   }
@@ -458,37 +462,40 @@ cxn.onError = function(reason) {
 };
 
 cxn.write = function(name, message) {
-  try {
-    if (cxn.devices.hasOwnProperty(name)) {
-      var mac = cxn.devices[name].mac;
-      var buffer = stringToBuffer(message);
-
-      if (cxn.appBLE) {
-        buffer = stringToBuffer(message);
-
-        // Break the message into smaller sections.
-        cxn.appBLE.write(mac,
-          nordicUARTservice.serviceUUID,
-          nordicUARTservice.txCharacteristic,
-          buffer,
-          cxn.onWriteOK,
-          cxn.onWriteFail);
-      } else if (cxn.webBLE) {
-        if (cxn.webBLEWrite) {
-          cxn.webBLEWrite.writeValue(buffer)
-          .then(function() {
-            //log.trace('write succeded', message);
-          })
-          .catch(function(error) {
-            //log.trace('write failed', message, error);
-            setTimeout(cxn.write(name, message), 50);
-          });
+  if (!cxn.calibrating)
+  {
+    try {
+      if (cxn.devices.hasOwnProperty(name)) {
+        var mac = cxn.devices[name].mac;
+        var buffer = stringToBuffer(message);
+  
+        if (cxn.appBLE) {
+          buffer = stringToBuffer(message);
+  
+          // Break the message into smaller sections.
+          cxn.appBLE.write(mac,
+            nordicUARTservice.serviceUUID,
+            nordicUARTservice.txCharacteristic,
+            buffer,
+            cxn.onWriteOK,
+            cxn.onWriteFail);
+        } else if (cxn.webBLE) {
+          if (cxn.webBLEWrite) {
+            cxn.webBLEWrite.writeValue(buffer)
+            .then(function() {
+              //log.trace('write succeded', message);
+            })
+            .catch(function(error) {
+              //log.trace('write failed', message, error);
+              setTimeout(cxn.write(name, message), 50);
+            });
+          }
+          //var cxn.webBLEWrite = null;
         }
-        //var cxn.webBLEWrite = null;
       }
+    } catch(error) {
+      log.trace('execption in BLE Write', error);
     }
-  } catch(error) {
-    log.trace('execption in BLE Write', error);
   }
 };
 
