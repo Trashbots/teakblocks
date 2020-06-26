@@ -497,6 +497,7 @@ cxn.write = function(name, message) {
       log.trace('execption in BLE Write', error);
     }
   }
+  return true
 };
 
 cxn.onWriteOK = function (data) {

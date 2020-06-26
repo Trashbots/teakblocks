@@ -97,9 +97,11 @@ module.exports = function(){
       cxn.calibrated = true;
       var botName = dso.deviceName;
       var message = '(calibrate)';
-      cxn.write(botName, message);
-
-      cxn.calibrating = true;
+      
+      if (cxn.write(botName, message))
+      {
+        cxn.calibrating = true;
+      }
     }
   };
 
