@@ -83,13 +83,15 @@ module.exports = function () {
 
   dso.decoratedName = function() {
     //console.log(fastr.robot + '  ' + dso.deviceName)
-    return dso.getBattery() + '  ' + dso.deviceName
+    return fastr.robot + ' ' + dso.deviceName 
   };
 
   dso.updateScreenName = function(botName) {
     dso.deviceName = botName;
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
-    dso.deviceNameLabel.innerHTML = dso.decoratedName();
+    console.log(dso.decoratedName())
+    console.log(dso.getBattery())
+    dso.deviceNameLabel.innerHTML = dso.decoratedName() + '  ' + dso.getBattery() ;
   };
 
   dso.updateLabel = function() {

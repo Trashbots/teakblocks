@@ -471,7 +471,9 @@ cxn.onError = function(reason) {
 };
 
 cxn.write = function(name, message) {
-  console.log(cxn.calibrating);
+  if (!cxn.calibrating)
+  {
+    console.log(cxn.calibrating);
     try {
       if (cxn.devices.hasOwnProperty(name)) {
         var mac = cxn.devices[name].mac;
@@ -505,6 +507,7 @@ cxn.write = function(name, message) {
     } catch(error) {
       log.trace('execption in BLE Write', error);
     }
+  }
 };
 
 cxn.onWriteOK = function (data) {
