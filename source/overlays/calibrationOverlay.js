@@ -97,8 +97,8 @@ module.exports = function(){
       cxn.calibrated = true;
       var botName = dso.deviceName;
       var message = '(cl)';
-      
-      cxn.write(botName, message)
+
+      cxn.write(botName, message);
     }
   };
 

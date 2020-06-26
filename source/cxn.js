@@ -424,7 +424,7 @@ cxn.onData = function(name, data) {
     //  log.trace('On Data:', name, str);
     cxn.messages.push(name + ':' + str);
     if(str.includes('ac')){
-      var accelData = str.substring(7, str.length - 1);
+      var accelData = str.substring(4, str.length - 1);
       cxn.accelerometer = parseInt(accelData, 10)/20;
     } else if(str.includes('(a)')){
       cxn.buttonA = true;
@@ -435,16 +435,16 @@ cxn.onData = function(name, data) {
     } else if(str.includes('compass')){
       cxn.compass = str.substring(9, str.length - 2);
     } else if(str.includes('tp')){
-      var tempData = str.substring(6, str.length - 1);
+      var tempData = str.substring(4, str.length - 1);
       var fData = (1.8*parseInt(tempData, 10))+32;
       cxn.temperature = fData;
     } else if(str.includes('vs')){
-      cxn.versionNumber = str.substring(9, str.length-1);
+      cxn.versionNumber = str.substring(4, str.length-1);
       console.log('version number:', cxn.versionNumber);
     }
     else if (str.includes('bt'))
     {
-      cxn.batteryPercent = str.substring(8, str.length-1);
+      cxn.batteryPercent = str.substring(4, str.length-1);
     }
     else if (str.includes('cs'))
     {
