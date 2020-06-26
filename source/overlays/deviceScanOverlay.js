@@ -39,7 +39,7 @@ module.exports = function () {
   const halfThreshold = (25+50)/2
   const oneQuarterThreshold = (25)/2
 
-  dso.nonName = '-?-';
+  dso.nonName = "-?-";
   dso.tbots = {};
   dso.deviceName = dso.nonName;
 
@@ -56,11 +56,11 @@ module.exports = function () {
   dso.getBattery = function()
   {
     let percent = cxn.batteryPercent
-    /*if (dso.deviceName === dso.nonName)
+    if (dso.deviceName === dso.nonName)
     {
-      return fastr.robot
+      return ""
     }
-    else */if (percent > fullThreshold)
+    else if (percent > fullThreshold)
     {
       return fastr.batteryFull
     }
@@ -91,7 +91,9 @@ module.exports = function () {
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
     console.log(dso.decoratedName())
     console.log(dso.getBattery())
-    dso.deviceNameLabel.innerHTML = dso.decoratedName() + '  ' + dso.getBattery() ;
+    dso.deviceNameLabel.innerHTML = dso.decoratedName();
+    dso.batteryLabel.innerHTML = dso.getBattery();
+    console.log(dso.deviceNameLabel.innerHTML)
   };
 
   dso.updateLabel = function() {
@@ -204,7 +206,7 @@ module.exports = function () {
     dso.interact = interact('.dso-svg-backgound', {context:dso.svg})
       .on('hold', function(e) { dso.testButton(e); } )
     dso.deviceNameLabel = document.getElementById('device-name-label');
-
+    dso.batteryLabel = document.getElementById('battery-label')
     if (!cxn.isBLESupported()) {
       dso.sorryCantDoIt();
     }

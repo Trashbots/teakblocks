@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+const { svg } = require('../blocks/identityBlocks/identityBlock.js');
+
 module.exports = function () {
   var actionDots = {};
   var interact = require('interact.js');
@@ -152,6 +154,7 @@ module.exports = function () {
     this.svgDotGroup = null;
     this.svgDot = null;
     this.svgText = null;
+    this.batteryText = null;
     this.svgTextOverlay = null;
     this.svgText2 = null;
     this.dotDiameter = dotd;
@@ -172,8 +175,11 @@ module.exports = function () {
       this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, dso.decoratedName());
       this.svgText.setAttribute('id', 'device-name-label');
 
-      //this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
-      //this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, dso.decoratedName());
+
+      this.batteryText = svgb.createText('fa fa fas action-dot-fatext', buttonCenter, fontY+80*scale, "");
+      this.batteryText.setAttribute('id', 'battery-label');
+      editStyle.setFontSize(this.batteryText.style, fontSize+20*scale);
+      svgDG.appendChild(this.batteryText)
       
     } else if (this.label === fastr.file) {
       // For files its the doc icon with letter inside.
@@ -187,10 +193,11 @@ module.exports = function () {
       this.svgText = svgb.createText('fa action-dot-fatext fas', x + dotHalf + this.tweakx, fontY, label);
     }
     editStyle.setFontSize(this.svgText.style, fontSize);
-
+    
     this.svgDot.setAttribute('id', 'action-dot-' + this.command);
     svgDG.appendChild(this.svgDot);
     svgDG.appendChild(this.svgText);
+
     if (this.svgTextOverlay !== null) {
       svgDG.appendChild(this.svgTextOverlay);
     }
