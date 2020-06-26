@@ -93,8 +93,8 @@ module.exports = function(){
   };
 
   calibrationOverlay.activate = function() {
-    if(!cxn.calibrating){
-      cxn.calibrating = true;
+    if(!cxn.calibrated){
+      cxn.calibrated = true;
       var botName = dso.deviceName;
       var message = '(calibrate)';
 

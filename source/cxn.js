@@ -34,6 +34,7 @@ module.exports = function factory(){
   cxn.connectingTimeout = 0;
   cxn.hostSelectedName = "";
   cxn.calibrating = false;
+  cxn.calibrated = false;
 
   cxn.accelerometer = null;
   cxn.temperature = null;
@@ -309,6 +310,7 @@ cxn.onDisconnectAppBLE = function(info) {
   cxn.setConnectionStatus(botName, cxn.statusEnum.NOT_THERE);
   cxn.cullList();
   cxn.versionNumber = null;
+  cxn.calibrated = false;
 };
 
 cxn.onDisconnecWebBLE = function(event) {
@@ -317,6 +319,7 @@ cxn.onDisconnecWebBLE = function(event) {
   cxn.setConnectionStatus(botName, cxn.statusEnum.NOT_THERE);
   cxn.cullList();
   cxn.versionNumber = null;
+  cxn.calibrated = false;
 };
 
 // Determine the status of a named connection.
