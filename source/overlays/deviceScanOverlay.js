@@ -81,19 +81,22 @@ module.exports = function () {
     }
   }
 
-  dso.decoratedName = function() {
-    //console.log(fastr.robot + '  ' + dso.deviceName)
-    return fastr.robot + ' ' + dso.deviceName 
-  };
+
 
   dso.updateScreenName = function(botName) {
     dso.deviceName = botName;
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
-    console.log(dso.decoratedName())
-    console.log(dso.getBattery())
-    dso.deviceNameLabel.innerHTML = dso.decoratedName();
-    dso.batteryLabel.innerHTML = dso.getBattery();
-    console.log(dso.deviceNameLabel.innerHTML)
+    // console.log(dso.decoratedName())
+    // console.log(dso.getBattery())
+    //dso.deviceName = "vegat"
+    if (dso.deviceName !== dso.nonName)
+    {
+      dso.deviceNameLabel.innerHTML = fastr.robot;
+      dso.deviceNameLabel.setAttribute('x', dso.robotOnlyPos)
+      dso.batteryLabel.innerHTML = dso.getBattery();
+      dso.actualNameLabel.innerHTML = dso.deviceName
+    }
+    //console.log(dso.deviceNameLabel.innerHTML)
   };
 
   dso.updateLabel = function() {
@@ -207,6 +210,7 @@ module.exports = function () {
       .on('hold', function(e) { dso.testButton(e); } )
     dso.deviceNameLabel = document.getElementById('device-name-label');
     dso.batteryLabel = document.getElementById('battery-label')
+    dso.actualNameLabel = document.getElementById('actual-name-label')
     if (!cxn.isBLESupported()) {
       dso.sorryCantDoIt();
     }

@@ -1,16 +1,13 @@
 /*
 Copyright (c) 2020 Trashbots - SDG
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -155,31 +152,44 @@ module.exports = function () {
     this.svgDot = null;
     this.svgText = null;
     this.batteryText = null;
+    //this.nameText = null;
     this.svgTextOverlay = null;
     this.svgText2 = null;
     this.dotDiameter = dotd;
     this.dopTop = y;
-
+    
     var svgDG = svgb.createGroup('action-dot', 0, 0);
     var label = this.label;
     var dotHalf = dotd/2;
     var fontY = y + dotHalf + (fontSize / 3);
-
+    
+    console.log(dso.robotOnlyPos)
     //Check if character strings are more than one character to create a label on top of the usual label
     if (this.command === 'deviceScanOverlay') {
+
+      
+      
       // For the connect label put the device name
       var buttonWidth = (170 * scale);
       var buttonLeft = x - buttonWidth - 20;
       var buttonCenter = buttonLeft + (80 * scale);
+      //console.log(svgb.createRect)
+      //console.log(buttonLeft + 35*scale)
+      dso.robotOnlyPos = buttonLeft+35*scale
       this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
-      this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, dso.decoratedName());
+      this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, fastr.robot+" -?-");
       this.svgText.setAttribute('id', 'device-name-label');
 
+      this.nameText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.25 + (fontSize / 3), "");
+      this.nameText.setAttribute('id', 'actual-name-label');
 
-      this.batteryText = svgb.createText('fa fa fas action-dot-fatext', buttonCenter, fontY+80*scale, "");
+      this.batteryText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.75 + (fontSize / 3), "");
       this.batteryText.setAttribute('id', 'battery-label');
-      editStyle.setFontSize(this.batteryText.style, fontSize+20*scale);
-      svgDG.appendChild(this.batteryText)
+
+      
+      editStyle.setFontSize(this.svgText.style, fontSize*1.1);
+      editStyle.setFontSize(this.batteryText.style, fontSize*0.95);
+      editStyle.setFontSize(this.nameText.style, fontSize*0.8);
       
     } else if (this.label === fastr.file) {
       // For files its the doc icon with letter inside.
@@ -187,17 +197,24 @@ module.exports = function () {
       this.svgText = svgb.createText('fa fas action-dot-fatext', x + dotHalf, fontY, label.substring(0, 1));
       this.svgTextOverlay = svgb.createText('action-dot-doc-label', x + dotHalf, fontY, 'A');
       actionDots.docTitleSVG = this.svgTextOverlay;
+      editStyle.setFontSize(this.svgText.style, fontSize);
     } else {
       // For simple buttons ther is just one font-awesome icon.
       this.svgDot = svgb.createCircle('action-dot-bg', x + dotHalf, y + dotHalf, dotHalf);
       this.svgText = svgb.createText('fa action-dot-fatext fas', x + dotHalf + this.tweakx, fontY, label);
+      editStyle.setFontSize(this.svgText.style, fontSize);
     }
-    editStyle.setFontSize(this.svgText.style, fontSize);
     
     this.svgDot.setAttribute('id', 'action-dot-' + this.command);
     svgDG.appendChild(this.svgDot);
     svgDG.appendChild(this.svgText);
-
+    if (this.nameText != null)
+    {
+      svgDG.appendChild(this.nameText)
+    }
+    if (this.batteryText !== null) {
+      svgDG.appendChild(this.batteryText)
+    }
     if (this.svgTextOverlay !== null) {
       svgDG.appendChild(this.svgTextOverlay);
     }
