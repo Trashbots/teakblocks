@@ -178,8 +178,8 @@ module.exports = function () {
       dso.robotOnlyPos = buttonLeft+35*scale
       this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
       this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, fastr.robot+" -?-");
-      this.svgText.setAttribute('id', 'device-name-label');
-
+      
+	  this.svgText.setAttribute('id', 'device-name-label');
       this.nameText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.25 + (fontSize / 3), "");
       this.nameText.setAttribute('id', 'actual-name-label');
 

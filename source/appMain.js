@@ -94,9 +94,20 @@ module.exports = function () {
     app.storage = app.fileManager.localStorage();
 
     if (window.MobileAccessibility) {
-      window.MobileAccessibility.usePreferredTextZoom(false);
-    }
+	  window.MobileAccessibility.usePreferredTextZoom(false);
+	}
+	var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent); //Checks if mobile
+	if (isMobile)
+	{
+		window.location.href = "http://tblocks.app.link";
+	}
+	/*
+	else
+	{
+		window.location.href = "http://tblocks.app.link"; //Testing purposes (redirects to trashbots.github.io)
+	}*/
 
+	
     // Configuration components for the app and blocks
     // Initialize knockout databinding for documents DOM
     tbe.components = {};
