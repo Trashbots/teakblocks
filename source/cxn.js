@@ -473,7 +473,7 @@ cxn.onError = function(reason) {
 cxn.write = function(name, message) {
   if (!cxn.calibrating)
   {
-    console.log(cxn.calibrating);
+    //console.log(cxn.calibrating);
     try {
       if (cxn.devices.hasOwnProperty(name)) {
         var mac = cxn.devices[name].mac;

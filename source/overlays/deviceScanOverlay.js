@@ -56,11 +56,11 @@ module.exports = function () {
   dso.getBattery = function()
   {
     let percent = cxn.batteryPercent
-    if (dso.deviceName === dso.nonName)
+    /*if (dso.deviceName === dso.nonName)
     {
       return ""
     }
-    else if (percent > fullThreshold)
+    else */if (percent > fullThreshold)
     {
       return fastr.batteryFull
     }
@@ -84,18 +84,22 @@ module.exports = function () {
 
 
   dso.updateScreenName = function(botName) {
-    dso.deviceName = botName;
+    dso.deviceName = "vegat";
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
     // console.log(dso.decoratedName())
-    // console.log(dso.getBattery())
-    //dso.deviceName = "vegat"
-    if (dso.deviceName !== dso.nonName)
+    // console.log(cxn.versionNumber)
+	//dso.deviceName = "vegat"
+    if (cxn.versionNumber >= 11 && dso.deviceName !== dso.nonName)
     {
       dso.deviceNameLabel.innerHTML = fastr.robot;
       dso.deviceNameLabel.setAttribute('x', dso.robotOnlyPos)
       dso.batteryLabel.innerHTML = dso.getBattery();
       dso.actualNameLabel.innerHTML = dso.deviceName
-    }
+	}
+	else 
+	{
+		dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
+	}
     //console.log(dso.deviceNameLabel.innerHTML)
   };
 

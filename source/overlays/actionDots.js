@@ -163,7 +163,7 @@ module.exports = function () {
     var dotHalf = dotd/2;
     var fontY = y + dotHalf + (fontSize / 3);
     
-    console.log(dso.robotOnlyPos)
+    //console.log(dso.robotOnlyPos)
     //Check if character strings are more than one character to create a label on top of the usual label
     if (this.command === 'deviceScanOverlay') {
 
@@ -178,8 +178,8 @@ module.exports = function () {
       dso.robotOnlyPos = buttonLeft+35*scale
       this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
       this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, fastr.robot+" -?-");
-      
 	  this.svgText.setAttribute('id', 'device-name-label');
+
       this.nameText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.25 + (fontSize / 3), "");
       this.nameText.setAttribute('id', 'actual-name-label');
 
@@ -187,7 +187,7 @@ module.exports = function () {
       this.batteryText.setAttribute('id', 'battery-label');
 
       
-      editStyle.setFontSize(this.svgText.style, fontSize*1.1);
+      editStyle.setFontSize(this.svgText.style, fontSize*1);
       editStyle.setFontSize(this.batteryText.style, fontSize*0.95);
       editStyle.setFontSize(this.nameText.style, fontSize*0.8);
       
