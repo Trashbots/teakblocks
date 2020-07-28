@@ -73,10 +73,7 @@ if (!app.isRegularBrowser) {
 			app.isCordovaApp = false;
 			app.start();
 		};
-	}//			 <a href="https://tblocks.app.link">tblocks</a> 			  <h3 style = "text-align:center;">Considering using our mobile app instead: </h3>
-
-
-	else {
+	} else {
 		app.isCordovaApp = false;
 		app.start();
 	}
