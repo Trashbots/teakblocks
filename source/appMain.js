@@ -21,10 +21,27 @@ SOFTWARE.
 */
 
 module.exports = function () {
-	const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent); //Checks if mobile
-	if (isMobile) {
-		window.location.href = "http://tblocks.app.link";
+
+
+	//const oldAlert = window.alert
+	/*
+	window.alert = function () {}
+	window.onload = function() {
+		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+		if (isMobile)
+		{
+			window.location.href = "tblocks://"
+			setTimeout(() => {window.location.href = "http://tblocks.app.link"}, 1000)
+		}
+		else
+		{
+			window.location.href = "https://trashbots.github.io/tblocks"
+		}
 	}
+	*/
+	//window.alert = oldAlert
+
+
 	var log = require('log.js');
 	var fastr = require('fastr.js');
 
@@ -124,7 +141,7 @@ module.exports = function () {
         <div id='cookiesGlass'></dev>
         <div id='cookiesForm'>
             <div id='cookiesNote'>
-              <input id='cookiesButton' type="button" value="  Accept Cookies  " style="float:right">
+			  <input id='cookiesButton' type="button" value="  Accept Cookies  " style="float:right">
               <p>
                   We use cookies and similar technologies for document
                   stroage functionality and to measure performance of application features.

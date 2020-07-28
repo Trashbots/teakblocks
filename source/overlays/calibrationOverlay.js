@@ -32,24 +32,24 @@ module.exports = function(){
   // External function for putting it all together.
   calibrationOverlay.start = function () {
 
-    overlays.insertHTML(`
-        <style id='calibration-text-id'>
-          calibration-text { font-size:18px; }
-        </style>
-        <div id='calibrationOverlay'>
-            <div id='calibrationDialog'>
-              <p class='calibration-title'>Smart Steering Calibration</p>
-              <p class='calibration-body calibration-text'>Click below to activate Smart Steering Calibration, a PID based system for accurate driving</p>
-              <!--p id = 'calibration-copy' class='calibration-body calibration-text'>© 2020 Trashbots. All rights reserved.</p-->
-              <br>
-            <div id='calibration-button-area'>
-                <button id='calibration-activate' class='calibration-button calibration-text'>Begin calibration!</button>
-            </div>
-            <br><br>
-            <button id='calibration-done' class='calibration-button calibration-text'>Close.</button>
-            <br>
-            </div>
-        </div>`);
+	overlays.insertHTML(`
+		<style id='calibration-text-id'>
+			calibration-text { font-size:18px; }
+		</style>
+		<div id='calibrationOverlay'>
+			<div id='calibrationDialog'>
+				<p class='calibration-title'>Smart Steering Calibration</p>
+				<p class='calibration-body calibration-text'>Click below to activate Smart Steering Calibration, a PID based system for accurate driving</p>
+				<!--p id = 'calibration-copy' class='calibration-body calibration-text'>© 2020 Trashbots. All rights reserved.</p-->
+				<br>
+			<div id='calibration-button-area'>
+				<button id='calibration-activate' class='calibration-button calibration-text'>Begin calibration!</button>
+			</div>
+			<br><br>
+			<button id='calibration-done' class='calibration-button calibration-text'>Close.</button>
+			<br>
+			</div>
+		</div>`);
 
     var caliArea = document.getElementById('calibration-button-area');
 

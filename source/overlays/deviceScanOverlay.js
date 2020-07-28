@@ -34,10 +34,10 @@ module.exports = function () {
   var dso = deviceScanOverlay;
 
 
-  const fullThreshold = (75+100)/2
-  const threeQuartersThreshold = (50+75)/2
-  const halfThreshold = (25+50)/2
-  const oneQuarterThreshold = (25)/2
+  const fullThreshold = (75+100)/2;
+  const threeQuartersThreshold = (50+75)/2;
+  const halfThreshold = (25+50)/2;
+  const oneQuarterThreshold = (25)/2;
 
   dso.nonName = "-?-";
   dso.tbots = {};
@@ -51,53 +51,38 @@ module.exports = function () {
   };
 
 
-  
-
-  dso.getBattery = function()
-  {
-    let percent = cxn.batteryPercent
+  dso.getBattery = function() {
+    let percent = cxn.batteryPercent;
     /*if (dso.deviceName === dso.nonName)
     {
       return ""
     }
-    else */if (percent > fullThreshold)
-    {
-      return fastr.batteryFull
+    else */if (percent > fullThreshold) {
+      return fastr.batteryFull;
+    } else if (percent > threeQuartersThreshold) {
+      return fastr.batteryThreeQuarters;
+    } else if (percent > halfThreshold) {
+      return fastr.batteryHalf;
+    } else if (percent > oneQuarterThreshold) {
+      return fastr.batteryOneQuarter;
+    } else {
+      return fastr.batteryEmpty;
     }
-    else if (percent > threeQuartersThreshold)
-    {
-      return fastr.batteryThreeQuarters
-    }
-    else if (percent > halfThreshold)
-    {
-      return fastr.batteryHalf
-    }
-    else if (percent > oneQuarterThreshold)
-    {
-      return fastr.batteryOneQuarter
-    }
-    else {
-      return fastr.batteryEmpty
-    }
-  }
-
+  };
 
 
   dso.updateScreenName = function(botName) {
-    dso.deviceName = "vegat";
+    dso.deviceName = botName;
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
     // console.log(dso.decoratedName())
     // console.log(cxn.versionNumber)
 	//dso.deviceName = "vegat"
-    if (cxn.versionNumber >= 11 && dso.deviceName !== dso.nonName)
-    {
+    if (cxn.versionNumber >= 11 && dso.deviceName !== dso.nonName) {
       dso.deviceNameLabel.innerHTML = fastr.robot;
-      dso.deviceNameLabel.setAttribute('x', dso.robotOnlyPos)
+      dso.deviceNameLabel.setAttribute('x', dso.robotOnlyPos);
       dso.batteryLabel.innerHTML = dso.getBattery();
-      dso.actualNameLabel.innerHTML = dso.deviceName
-	}
-	else 
-	{
+      dso.actualNameLabel.innerHTML = dso.deviceName;
+	} else {
 		dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
 	}
     //console.log(dso.deviceNameLabel.innerHTML)
@@ -211,10 +196,10 @@ module.exports = function () {
     dso.saveHold = interact.debug().defaultOptions._holdDuration;
     interact.debug().defaultOptions._holdDuration = 2000;
     dso.interact = interact('.dso-svg-backgound', {context:dso.svg})
-      .on('hold', function(e) { dso.testButton(e); } )
+      .on('hold', function(e) { dso.testButton(e); } );
     dso.deviceNameLabel = document.getElementById('device-name-label');
-    dso.batteryLabel = document.getElementById('battery-label')
-    dso.actualNameLabel = document.getElementById('actual-name-label')
+    dso.batteryLabel = document.getElementById('battery-label');
+    dso.actualNameLabel = document.getElementById('actual-name-label');
     if (!cxn.isBLESupported()) {
       dso.sorryCantDoIt();
     }
@@ -231,7 +216,7 @@ module.exports = function () {
   dso.sorryCantDoIt = function() {
     var tb = new tbot.Class(dso.tbotGroup, 100, 20, '-----', icons.sad55);
     dso.tbotGroup = dso.svg.appendChild(svgb.createGroup('', 0, 0));
-    var message = 'Cannot access Bluetooth (BLE)'
+    var message = 'Cannot access Bluetooth (BLE)';
     dso.tbotGroup.appendChild(svgb.createText('svg-clear tbot-device-name', 450, 95, message));
   };
 

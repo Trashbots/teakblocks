@@ -21,31 +21,64 @@ SOFTWARE.
 */
 
 var app = require('./appMain.js');
+var overlays = require('./overlays/overlays.js').init();
+
 
 // Determine if page launched in broswer, or cordova/phone-gap app.
 app.isRegularBrowser =
-  document.URL.indexOf('http://') >= 0 ||
-  document.URL.indexOf('https://') >= -0;
+	document.URL.indexOf('http://') >= 0 ||
+	document.URL.indexOf('https://') >= -0;
 
 if (!app.isRegularBrowser) {
 
-  // Add view port info dynamically. might help iOS WKWebview
-  var meta = document.createElement('meta');
-  meta.name = 'viewport';
-  meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0';
-  document.getElementsByTagName('head')[0].appendChild(meta);
-  //<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	// Add view port info dynamically. might help iOS WKWebview
+	var meta = document.createElement('meta');
+	meta.name = 'viewport';
+	meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0';
+	document.getElementsByTagName('head')[0].appendChild(meta);
+	//<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 
-  app.isCordovaApp = true;
-  // Guess that it is Cordova then. Not intened to run directly from file:
-  document.addEventListener('deviceready', app.start, false);
-  var script = document.createElement('script');
-  // Load cordova.js if not in regular browser, and then set up initialization.
-  script.setAttribute('src','./cordova.js');
-  document.head.appendChild(script);
+	app.isCordovaApp = true;
+	// Guess that it is Cordova then. Not intened to run directly from file:
+	document.addEventListener('deviceready', app.start, false);
+	var script = document.createElement('script');
+	// Load cordova.js if not in regular browser, and then set up initialization.
+	script.setAttribute('src', './cordova.js');
+	document.head.appendChild(script);
 } else {
-  // If in regular broswer, call start directly.
-  app.isCordovaApp = false;
-  app.start();
+	// If in regular broswer, call start directly.
+	const isMobile = (/iPhone|iPad|iPod|Android/i).test(navigator.userAgent);
+	if (isMobile) {
+		//window.location.href = 'landingPage.html'
+		overlays.insertHTML(`
+        <div id='mobileOverlay'>
+            <div id='mobileDialog'>
+			  <h1 style = "text-align:center">You are on a mobile Device</h1>
+				<div style = "text-align:center;">
+					Consider using our mobile app instead: <a href = "https://tblocks.app.link">TBlocks</a>
+				</div>
+				<br>
+				<br>
+				<div style = "text-align:center;">
+					Or continue with <a id="regularWebsite" href = '#'>our website</a>.
+				</div>
+			  </div>
+		</div>`
+		);
+		var regularWebsite = document.getElementById("regularWebsite");
+		regularWebsite.onclick = function () {
+			document.getElementById("mobileOverlay").style.display = "none";
+			event.preventDefault();
+			app.isCordovaApp = false;
+			app.start();
+		};
+	}//			 <a href="https://tblocks.app.link">tblocks</a> 			  <h3 style = "text-align:center;">Considering using our mobile app instead: </h3>
+
+
+	else {
+		app.isCordovaApp = false;
+		app.start();
+	}
 }
+
