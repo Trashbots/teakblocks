@@ -41,7 +41,7 @@ module.exports = function factory(){
   cxn.buttonA = null;
   cxn.buttonB = null;
   cxn.buttonAB = null;
-  cxn.batteryPercent = 50
+  cxn.batteryPercent = 50;
 // State enumeration for conections.
 cxn.statusEnum = {
   NOT_THERE : 0,
@@ -365,7 +365,7 @@ cxn.disconnectAll = function() {
       cxn.webBLERead = null;
     }
   }
-}
+};
 
 cxn.disconnect = function(name) {
   if (cxn.appBLE) {
@@ -423,8 +423,8 @@ cxn.onData = function(name, data) {
     var str = bufferToString(data);
     //  log.trace('On Data:', name, str);
     cxn.messages.push(name + ':' + str);
-    if(str.includes('ac')){
-      var accelData = str.substring(4, str.length - 1);
+    if(str.includes('ac') || str.includes('accel')){
+      var accelData = str.includes('ac') ? str.substring(4, str.length - 1) : str.substring(7, str.length-1);
       cxn.accelerometer = parseInt(accelData, 10)/20;
     } else if(str.includes('(a)')){
       cxn.buttonA = true;
@@ -434,24 +434,18 @@ cxn.onData = function(name, data) {
       cxn.buttonAB = true;
     } else if(str.includes('compass')){
       cxn.compass = str.substring(9, str.length - 2);
-    } else if(str.includes('tp')){
-      var tempData = str.substring(4, str.length - 1);
+    } else if(str.includes('tp') || str.includes('temp')){
+      var tempData = str.includes('tp') ? str.substring(4, str.length - 1) : str.substring(6, str.length - 1);
       var fData = (1.8*parseInt(tempData, 10))+32;
       cxn.temperature = fData;
     } else if(str.includes('vs')){
       cxn.versionNumber = str.substring(4, str.length-1);
       console.log('version number:', cxn.versionNumber);
-    }
-    else if (str.includes('bt'))
-    {
+    } else if (str.includes('bt')) {
       cxn.batteryPercent = str.substring(4, str.length-1);
-    }
-    else if (str.includes('cs'))
-    {
+    } else if (str.includes('cs')) {
       cxn.calibrating = true;
-    }
-    else if (str.includes('cf'))
-    {
+    } else if (str.includes('cf')) {
       cxn.calibrating = false;
       cxn.calibrated = true;
     }
@@ -471,8 +465,7 @@ cxn.onError = function(reason) {
 };
 
 cxn.write = function(name, message) {
-  if (!cxn.calibrating)
-  {
+  if (!cxn.calibrating) {
     //console.log(cxn.calibrating);
     try {
       if (cxn.devices.hasOwnProperty(name)) {
