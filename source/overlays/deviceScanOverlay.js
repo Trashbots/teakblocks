@@ -76,15 +76,15 @@ module.exports = function () {
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
     // console.log(dso.decoratedName())
     // console.log(cxn.versionNumber)
-	//dso.deviceName = "vegat"
+    //dso.deviceName = "vegat"
     if (cxn.versionNumber >= 11 && dso.deviceName !== dso.nonName) {
       dso.deviceNameLabel.innerHTML = fastr.robot;
       dso.deviceNameLabel.setAttribute('x', dso.robotOnlyPos);
       dso.batteryLabel.innerHTML = dso.getBattery();
       dso.actualNameLabel.innerHTML = dso.deviceName;
-	} else {
-		dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
-	}
+    } else {
+      dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
+    }
     //console.log(dso.deviceNameLabel.innerHTML)
   };
 
