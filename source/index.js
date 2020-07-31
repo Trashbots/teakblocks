@@ -50,26 +50,27 @@ if (!app.isRegularBrowser) {
 	// If in regular broswer, call start directly.
 	const isMobile = (/iPhone|iPad|iPod|Android/i).test(navigator.userAgent);
 	if (isMobile) {
-		//window.location.href = 'landingPage.html'
+		// Build the HTML for mobile overlay without animation
 		overlays.insertHTML(`
-        <div id='mobileOverlay'>
-            <div id='mobileDialog'>
-			  <h1 style = "text-align:center">You are on a mobile Device</h1>
-				<div style = "text-align:center;">
-					Consider using our mobile app instead: <a href = "https://tblocks.app.link">TBlocks</a>
+			<div id='mobileOverlay'>
+				<div id='mobileDialog'>
+				<h1 style = "text-align:center">You are on a mobile Device</h1>
+					<div style = "text-align:center;">
+						Consider using our mobile app instead: <a href = "https://tblocks.app.link">TBlocks</a>
+					</div>
+					<br>
+					<br>
+					<div style = "text-align:center;">
+						Or continue with <a href = '#' id="regularWebsite">our website</a>.
+					</div>
 				</div>
-				<br>
-				<br>
-				<div style = "text-align:center;">
-					Or continue with <a id="regularWebsite" href = '#'>our website</a>.
-				</div>
-			  </div>
-		</div>`
+			</div>`
 		);
 		var regularWebsite = document.getElementById("regularWebsite");
 		regularWebsite.onclick = function () {
+			overlays.currentIsClosing = true;
 			document.getElementById("mobileOverlay").style.display = "none";
-			event.preventDefault();
+			overlays.overlayShell.classList.add('fullScreenSlideOut');
 			app.isCordovaApp = false;
 			app.start();
 		};

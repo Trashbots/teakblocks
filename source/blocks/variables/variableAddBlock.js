@@ -31,8 +31,6 @@ module.exports = function () {
   // Items for selecting a device from a list.
   //identityAccelerometer.devices = ko.observableArray([]);
   variableAddBlock.keyPadValue = ko.observable(0);
-
-
   // Initial settings for blocks of this type.
   variableAddBlock.defaultSettings = function() {
     // Return a new object with settings for the controller.
@@ -71,7 +69,7 @@ module.exports = function () {
       'inner': `<div id='keypadDiv' class='editorDiv'>
           <select class="dropdown-comparison vars-dropdown-comparison" id="var-list">
           </select>
-          <div class="dropdown-label-txt varAdd-label-txt svg-clear" id="varAdd-incdec">\uf061
+          <div class="dropdown-label-txt varAdd-label-txt svg-clear" id="varAdd-incdec">\u2192
           </div>
           <div id="numeric-display" class = "numeric-display-third svg-clear" width='30px' height='80px' data-bind='text: keyPadValue'>
           </div>

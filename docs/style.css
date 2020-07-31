@@ -391,6 +391,7 @@ label input[type="checkbox"]:disabled + .label-text:before {
 .varAdd-label-txt {
   padding-left: 30px;
   font-family: "FontAwesome";
+  font-weight: bold;
   font-size: 30px;
   padding-top: 0px;
 }
