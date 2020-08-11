@@ -52,7 +52,7 @@ module.exports = function factory(){
       temp: '\uf2c9',
       loop: '\uf2ea',
       data: '\uf080',
-      calibrate: '\uf24e',
+      calibrate: '\uf24e', //f013 - settings // f24e - scale //f140 - target
       batteryFull: '\uf240',
       batteryThreeQuarters: '\uf241',
       batteryHalf: '\uf242',

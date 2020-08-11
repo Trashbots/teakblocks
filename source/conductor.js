@@ -134,8 +134,16 @@ module.exports = function () {
           }
         }
       }
-    }
-    conductor.hbTimer = setTimeout(function() { conductor.linkHeartBeat(); }, 1000);
+	}
+	if (block.name === 'print') {
+		let x = conductor.getPrintVal(block.controllerSettings.data) //value
+		let digits = x.toString().length
+		conductor.hbTimer = setTimeout(function() { conductor.linkHeartBeat(); }, digits*1000);
+
+		// conductor.hbTimer = setTimeout(function() { conductor.linkHeartBeat(); }, 3000);
+	} else {
+		conductor.hbTimer = setTimeout(function() { conductor.linkHeartBeat(); }, 1000);
+	}
   };
 
   // Find all start all blocks and start them running.

@@ -210,10 +210,10 @@ module.exports = function () {
     svgDG.appendChild(this.svgText);
     if (this.nameText != null)
     {
-      svgDG.appendChild(this.nameText)
+      svgDG.appendChild(this.nameText);
     }
     if (this.batteryText !== null) {
-      svgDG.appendChild(this.batteryText)
+      svgDG.appendChild(this.batteryText);
     }
     if (this.svgTextOverlay !== null) {
       svgDG.appendChild(this.svgTextOverlay);
