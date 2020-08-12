@@ -35,13 +35,13 @@ module.exports = function factory(){
   cxn.hostSelectedName = "";
   cxn.calibrating = false;
   cxn.calibrated = false;
-
   cxn.accelerometer = null;
   cxn.temperature = null;
   cxn.buttonA = null;
   cxn.buttonB = null;
   cxn.buttonAB = null;
   cxn.batteryPercent = 50;
+  cxn.botName = null;
 // State enumeration for conections.
 cxn.statusEnum = {
   NOT_THERE : 0,
@@ -441,7 +441,10 @@ cxn.onData = function(name, data) {
     } else if(str.includes('vs')){
       cxn.versionNumber = str.substring(4, str.length-1);
 	  console.log('version number:', cxn.versionNumber);
-	  cxn.write(name, '(vr)');
+	  if (cxn.botName)
+	  {
+		cxn.write(cxn.botName, '(vr)');
+	  }
     } else if (str.includes('bt')) {
       cxn.batteryPercent = str.substring(4, str.length-1);
     } else if (str.includes('cs')) {
