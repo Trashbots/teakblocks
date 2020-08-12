@@ -56,12 +56,7 @@ if (!app.isRegularBrowser) {
 				<div id='mobileDialog'>
 				<h1 style = "text-align:center">You are on a mobile Device</h1>
 					<div style = "text-align:center;">
-						Consider using our mobile app instead: <a href = "https://tblocks.app.link">TBlocks</a>
-					</div>
-					<br>
-					<br>
-					<div style = "text-align:center;">
-						Or continue with <a href = '#' id="regularWebsite">our website</a>.
+						Consider using our mobile app: <a href = "https://tblocks.app.link">TBlocks</a>
 					</div>
 				</div>
 			</div>`
