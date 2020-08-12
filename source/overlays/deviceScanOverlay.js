@@ -273,9 +273,9 @@ module.exports = function () {
       dso.watch = null;
     }
 
-    var botName = dso.deviceName;
-    var message = '(vs)';
-    cxn.write(botName, message);
+    //var botName = dso.deviceName;
+    //var message = '(vs)';
+    //cxn.write(botName, message);
   };
 
   dso.tryConnect = function(tb) {

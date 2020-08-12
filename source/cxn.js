@@ -440,7 +440,8 @@ cxn.onData = function(name, data) {
       cxn.temperature = fData;
     } else if(str.includes('vs')){
       cxn.versionNumber = str.substring(4, str.length-1);
-      console.log('version number:', cxn.versionNumber);
+	  console.log('version number:', cxn.versionNumber);
+	  cxn.write(name, '(vr)');
     } else if (str.includes('bt')) {
       cxn.batteryPercent = str.substring(4, str.length-1);
     } else if (str.includes('cs')) {
