@@ -70,6 +70,7 @@ module.exports = function () {
 	};
 
 	conductor.linkHeartBeat = function () {
+		let duration = 1000;
 		var botName = dso.deviceName;
 		conductor.hbTimer = 0;
 		conductor.cxn.write(botName, '(m:(1 2) d:0);');
@@ -105,6 +106,11 @@ module.exports = function () {
 
 
 					// If this is a new block, get its duration
+
+					if (block.name === 'print') {
+						let x = conductor.getPrintVal(block.controllerSettings.data); //value
+						duration = x.toString().length * 1000; //digits * 1000
+					}
 					if (block.count === null || block.count === undefined) {
 						block.count = block.controllerSettings.data.duration;
 
@@ -154,7 +160,7 @@ module.exports = function () {
 
 		// 	// conductor.hbTimer = setTimeout(function() { conductor.linkHeartBeat(); }, 3000);
 		// } else {
-		conductor.hbTimer = setTimeout(function () { conductor.linkHeartBeat(); }, 1000);
+		conductor.hbTimer = setTimeout(function () { conductor.linkHeartBeat(); }, duration);
 		// }
 	};
 
