@@ -106,14 +106,14 @@ module.exports = function () {
 
 					// If this is a new block, get its duration
 					if (block.count === null || block.count === undefined) {
-						// block.count = block.controllerSettings.data.duration;
+						block.count = block.controllerSettings.data.duration;
 
-						if (block.name === 'print') {
-							let x = conductor.getPrintVal(block.controllerSettings.data); //value
-							block.count = x.toString().length; //digits
-						} else {
-							block.count = block.controllerSettings.data.duration;
-						}
+						// if (block.name === 'print') {
+						// 	let x = conductor.getPrintVal(block.controllerSettings.data); //value
+						// 	block.count = x.toString().length; //digits
+						// } else {
+						// 	block.count = block.controllerSettings.data.duration;
+						// }
 					}
 
 					// If it does not have a duration or it has a duration of 0
