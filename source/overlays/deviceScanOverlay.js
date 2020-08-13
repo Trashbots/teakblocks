@@ -84,12 +84,7 @@ module.exports = function () {
       dso.actualNameLabel.innerHTML = dso.deviceName;
     } else {
       dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
-	}
-	if (dso.deviceName === dso.nonName) {
-		cxn.botName = null;
-	} else {
-		cxn.botName = dso.deviceName;
-	}
+    }
     //console.log(dso.deviceNameLabel.innerHTML)
   };
 
@@ -278,9 +273,9 @@ module.exports = function () {
       dso.watch = null;
     }
 
-    //var botName = dso.deviceName;
-    //var message = '(vs)';
-    //cxn.write(botName, message);
+    var botName = dso.deviceName;
+    var message = '(vs)';
+    cxn.write(botName, message);
   };
 
   dso.tryConnect = function(tb) {

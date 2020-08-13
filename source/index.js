@@ -61,14 +61,6 @@ if (!app.isRegularBrowser) {
 				</div>
 			</div>`
 		);
-		var regularWebsite = document.getElementById("regularWebsite");
-		regularWebsite.onclick = function () {
-			overlays.currentIsClosing = true;
-			document.getElementById("mobileOverlay").style.display = "none";
-			overlays.overlayShell.classList.add('fullScreenSlideOut');
-			app.isCordovaApp = false;
-			app.start();
-		};
 	} else {
 		app.isCordovaApp = false;
 		app.start();
