@@ -109,7 +109,7 @@ module.exports = function () {
 
 					if (block.name === 'print') {
 						let x = conductor.getPrintVal(block.controllerSettings.data); //value
-						duration = x.toString().length * 1000; //digits * 1000
+						duration = (x.toString().length + 1)* 1000; //digits * 1000
 					}
 					if (block.count === null || block.count === undefined) {
 						block.count = block.controllerSettings.data.duration;
@@ -327,7 +327,7 @@ module.exports = function () {
 			}
 		}
 		console.log('conductor print', d.print, d.variable, d.sensor, val);
-		return Math.trunc(val);
+		return Math.trunc(val); //truncated to an integer
 	};
 
 	conductor.playSingleChain = function () {
