@@ -327,7 +327,7 @@ module.exports = function () {
 			}
 		}
 		console.log('conductor print', d.print, d.variable, d.sensor, val);
-		return val;
+		return Math.trunc(val);
 	};
 
 	conductor.playSingleChain = function () {
