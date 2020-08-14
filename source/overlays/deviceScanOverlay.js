@@ -84,7 +84,12 @@ module.exports = function () {
       dso.actualNameLabel.innerHTML = dso.deviceName;
     } else {
       dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
-    }
+	}
+	if (dso.deviceName !== dso.nonName) {
+		cxn.botName = dso.deviceName;
+	} else {
+		cxn.botName = null;
+	}
     //console.log(dso.deviceNameLabel.innerHTML)
   };
 
