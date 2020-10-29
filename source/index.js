@@ -21,7 +21,7 @@ SOFTWARE.
 */
 
 var app = require('./appMain.js');
-var overlays = require('./overlays/overlays.js').init();
+//var overlays = require('./overlays/overlays.js').init();
 
 
 // Determine if page launched in broswer, or cordova/phone-gap app.
@@ -51,6 +51,7 @@ if (!app.isRegularBrowser) {
 	const isMobile = (/iPhone|iPad|iPod|Android/i).test(navigator.userAgent);
 	if (isMobile) {
 		// Build the HTML for mobile overlay without animation
+		var overlays = document.getElementById('overlayLayer');
 		overlays.insertHTML(`
 			<div id='mobileOverlay'>
 				<div id='mobileDialog'>
@@ -66,4 +67,3 @@ if (!app.isRegularBrowser) {
 		app.start();
 	}
 }
-
