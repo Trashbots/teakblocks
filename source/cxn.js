@@ -424,7 +424,7 @@ module.exports = function factory() {
 			//  log.trace('On Data:', name, str);
 			cxn.messages.push(name + ':' + str);
 			if (str.includes('ac') || str.includes('accel')) {
-				var accelData = str.includes('ac') ? str.substring(4, str.length - 1) : str.substring(7, str.length - 1);
+				var accelData = str.includes('ac:') ? str.substring(4, str.length - 1) : str.substring(7, str.length - 1);
 				cxn.accelerometer = parseInt(accelData, 10) / 20;
 			} else if (str.includes('(a)')) {
 				cxn.buttonA = true;
@@ -434,7 +434,7 @@ module.exports = function factory() {
 				cxn.buttonAB = true;
 			} else if (str.includes('compass')) {
 				cxn.compass = str.substring(9, str.length - 2);
-			} else if (str.includes('tp') || str.includes('temp')) {
+			} else if (str.includes('tp:') || str.includes('temp')) {
 				var tempData = str.includes('tp') ? str.substring(4, str.length - 1) : str.substring(6, str.length - 1);
 				var fData = (1.8 * parseInt(tempData, 10)) + 32;
 				cxn.temperature = fData;
