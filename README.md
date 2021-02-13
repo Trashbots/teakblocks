@@ -13,7 +13,7 @@ npm install -g catw             // For build process
 Yes, it is also based on [npm](https://www.npmjs.com/) packages and thus npm and [node](https://nodejs.org/en/) itself.
 
 If you just want to use teakblocks in a browser. this is all you need. To build
-native apps you need [Condova](https://cordova.apache.org/) as well. Cordova is also installed with npm.
+native apps you need [Cordova](https://cordova.apache.org/) as well. Cordova is also installed with npm.
 
 ```
 npm install -g cordova
@@ -30,26 +30,37 @@ cordova build android
 cordova run android
 ```
 
+# Simple browser-only setup
+For browser-only setup, run the following command:
+```
+npm run browser-install
+```
+
+Additionally, replace the `/html_app/www/font-awesome` folder with the `/font-awesome` folder from https://github.com/Trashbots/tblocks.
+
+
 # Building and Deploying
 Automation is still minimal but there are a few tools packaged as npm scripts. One nice upside to npm scripts is that they can be run from any directory in the repo's file structure. To see how the scripts work look at the `<package.json>` file.
 
 ```
-npm run cpfonts // copy font awesome from modules to html_app (run this once)
+npm run cpfonts4  // copy font awesome from modules to html_app (run this once)
 
-npm run bify    // Run browserify
+npm run watch-css // Copies .less files (css)
 
-npm run wify    // Run browserify with watchify
+npm run wify      // Run browserify with watchify
 
-npm run http    // Run npm's http-server on the ./html_app/www directory
+npm run http      // Run npm's http-server on the ./html_app/www directory
 
-npm run abuild   // Kick off Cordova/android build
+npm run watch-dev // Runs three above scripts (watch-css, wify, http)
 
-npm run adeploy  // Download to tablet/phone using adb
+npm run abuild    // Kick off Cordova/android build
 
-npm run          // List these scripts.
+npm run adeploy   // Download to tablet/phone using adb
+
+npm run           // List these scripts.
 ```
 
-When you edit JS files the bundle_tbe.js must be rebuilt before your changes will take affect. You can use `<npm run bify>` or set up the tool [watchify](https://www.npmjs.com/package/watchify) that triggers the builds automatically. The build typically takes about a second.
+When you edit JS files the bundle_tbe.js must be rebuilt before your changes will take affect. You can set up the tool [watchify](https://www.npmjs.com/package/watchify) that triggers the builds automatically. The build typically takes about a second.
 
 Note that android development requires the Android SDK which is part of [Android Studio](https://developer.android.com/studio/index.html). The SDK must also be added to the command line path. That will look something like this:
 
