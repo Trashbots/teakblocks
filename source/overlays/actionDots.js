@@ -162,15 +162,46 @@ module.exports = function () {
     var dotHalf = dotd/2;
     var fontY = y + dotHalf + (fontSize / 3);
 
+<<<<<<< Updated upstream
     //Check if character strings are more than one character to create a label on top of the usual label
     if (this.command === 'deviceScanOverlay') {
+=======
+    //console.log(dso.robotOnlyPos)
+    //Check if character strings are more than one character to create a label on top of the usual label
+    if (this.command === 'deviceScanOverlay') {
+
+
+
+>>>>>>> Stashed changes
       // For the connect label put the device name
       var buttonWidth = (170 * scale);
       var buttonLeft = x - buttonWidth - 20;
       var buttonCenter = buttonLeft + (80 * scale);
+<<<<<<< Updated upstream
       this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
       this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, dso.decoratedName());
       this.svgText.setAttribute('id', 'device-name-label');
+=======
+      //console.log(svgb.createRect)
+      //console.log(buttonLeft + 35*scale)
+      dso.robotOnlyPos = buttonLeft+35*scale;
+      dso.originalPos = buttonLeft + (80 * scale);
+      this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
+      this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, fastr.robot+" -?-");
+      this.svgText.setAttribute('id', 'device-name-label');
+
+      this.nameText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.25 + (fontSize / 3), "");
+      this.nameText.setAttribute('id', 'actual-name-label');
+
+      this.batteryText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.75 + (fontSize / 3), "");
+      this.batteryText.setAttribute('id', 'battery-label');
+
+
+      editStyle.setFontSize(this.svgText.style, fontSize*1);
+      editStyle.setFontSize(this.batteryText.style, fontSize*0.95);
+      editStyle.setFontSize(this.nameText.style, fontSize*0.8);
+
+>>>>>>> Stashed changes
     } else if (this.label === fastr.file) {
       // For files its the doc icon with letter inside.
       this.svgDot = svgb.createCircle('action-dot-bg', x + dotHalf, y + dotHalf, dotHalf);
@@ -182,7 +213,10 @@ module.exports = function () {
       this.svgDot = svgb.createCircle('action-dot-bg', x + dotHalf, y + dotHalf, dotHalf);
       this.svgText = svgb.createText('fa action-dot-fatext fas', x + dotHalf + this.tweakx, fontY, label);
     }
+<<<<<<< Updated upstream
     editStyle.setFontSize(this.svgText.style, fontSize);
+=======
+>>>>>>> Stashed changes
 
     this.svgDot.setAttribute('id', 'action-dot-' + this.command);
     svgDG.appendChild(this.svgDot);

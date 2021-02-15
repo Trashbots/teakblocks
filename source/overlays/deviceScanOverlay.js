@@ -33,7 +33,19 @@ module.exports = function () {
   var deviceScanOverlay = {};
   var dso = deviceScanOverlay;
 
+<<<<<<< Updated upstream
   dso.nonName = '-?-';
+=======
+
+  const fullThreshold = (75+100)/2;
+  const threeQuartersThreshold = (50+75)/2;
+  const halfThreshold = (25+50)/2;
+  const oneQuarterThreshold = (25)/2;
+
+  var batteryPercentData = [3.61, 3.69, 3.71, 3.73, 3.75, 3.77, 3.79, 3.8, 3.82, 3.84, 3.85, 3.87, 3.91, 3.95, 3.98, 4.02, 4.08, 4.11, 4.15, 4.2];
+
+  dso.nonName = "-?-";
+>>>>>>> Stashed changes
   dso.tbots = {};
   dso.deviceName = dso.nonName;
 
@@ -44,14 +56,63 @@ module.exports = function () {
     }
   };
 
+<<<<<<< Updated upstream
   dso.decoratedName = function() {
     return fastr.robot + '  ' + dso.deviceName;
+=======
+
+  dso.getBattery = function() {
+    let batteryV = cxn.batterymV/1000;
+    let percent = null;
+
+    for(var i in batteryPercentData){
+      if(batteryPercentData[i] > batteryV){
+        percent = i*5;
+        break;
+      }
+    }
+    console.log("percent", percent);
+    /*if (dso.deviceName === dso.nonName)
+    {
+      return ""
+    }
+    else */if (percent > fullThreshold) {
+      return fastr.batteryFull;
+    } else if (percent > threeQuartersThreshold) {
+      return fastr.batteryThreeQuarters;
+    } else if (percent > halfThreshold) {
+      return fastr.batteryHalf;
+    } else if (percent > oneQuarterThreshold) {
+      return fastr.batteryOneQuarter;
+    } else {
+      return fastr.batteryEmpty;
+    }
+>>>>>>> Stashed changes
   };
 
   dso.updateScreenName = function(botName) {
     dso.deviceName = botName;
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
+<<<<<<< Updated upstream
     dso.deviceNameLabel.innerHTML = dso.decoratedName();
+=======
+
+    if (cxn.versionNumber >= 11 && dso.deviceName !== dso.nonName && cxn.batterymV !== null) { // must update battery too
+      dso.deviceNameLabel.innerHTML = fastr.robot;
+      dso.deviceNameLabel.setAttribute('x', dso.robotOnlyPos);
+      dso.batteryLabel.innerHTML = dso.getBattery();
+      dso.actualNameLabel.innerHTML = dso.deviceName;
+    } else if (dso.deviceNameLabel !== undefined) { // only update the name (no battery)
+      dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
+  	}
+
+  	if (dso.deviceName !== dso.nonName) {
+  		cxn.botName = dso.deviceName;
+  	} else {
+  		cxn.botName = null;
+  	}
+    //console.log(dso.deviceNameLabel.innerHTML)
+>>>>>>> Stashed changes
   };
 
   dso.updateLabel = function() {
@@ -302,6 +363,14 @@ module.exports = function () {
           cxnSelectedBot = key;
       }
     }
+
+    if(cxnSelectedBot === dso.nonName){
+      dso.deviceNameLabel.setAttribute('x', dso.originalPos);
+      dso.batteryLabel.innerHTML = '';
+      dso.actualNameLabel.innerHTML = '';
+      cxn.batterymV = null;
+    }
+
     dso.updateLabel();
     dso.updateScreenName(cxnSelectedBot);
   };
