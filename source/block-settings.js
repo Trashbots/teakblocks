@@ -304,6 +304,16 @@ module.exports = function () {
   blockSettings.onClickTab = function() {
     // Since its DOM event, 'this' will be the button.
     blockSettings.selectActiveTab(this.id);
+
+    // update motor
+    var block = blockSettings.activeBlock;
+    var tabs = document.getElementsByClassName('block-settings-tab');
+    for(var i = 0; i < tabs.length; i++){
+      if(tabs[i].classList.contains('tab-selected')){
+        block.controllerSettings.data.motor = tabs[i].textContent;
+      }
+    }
+    block.updateSvg();
   };
 
   blockSettings.selectActiveTab = function(name) {
