@@ -272,11 +272,14 @@ module.exports = function () {
     dso.background = null;
     dso.tbotGroup = null;
 
-    if (cxn.scanning) {
-      cxn.stopScanning();
-      dso.watch.dispose();
-      dso.watch = null;
-    }
+    // if (cxn.scanning) {
+    //   console.log("cxn.scanning");
+    //   cxn.stopScanning();
+    //   dso.watch.dispose();
+    //   dso.watch = null;
+    // } else {
+    //   console.log("not cxn.scanning");
+    // }
 
     var botName = dso.deviceName;
     var message = '(vs)';
