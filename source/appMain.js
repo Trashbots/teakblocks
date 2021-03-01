@@ -82,17 +82,17 @@ module.exports = function () {
 		if (window.cordova !== undefined) {
 			app.platformId = window.cordova.platformId;
 		} else {
-			app.platformId = "broswer";
+			app.platformId = "browser";
 		}
 
 		var isApp = app.isCordovaApp;
 		var w = window.innerWidth;
 		var h = window.innerHeight;
-		var luanchMessage = 'verson:' + app.buildFlags.version +
+		var launchMessage = 'version:' + app.buildFlags.version +
 			', isApp:' + app.isCordovaApp +
 			', platform:' + app.platformId +
 			', screen:(' + w + ', ' + h + ')';
-		log.trace(luanchMessage);
+		log.trace(launchMessage);
 
 		// Once app has started these can be added.
 		document.addEventListener("pause", app.pause, false);
@@ -108,6 +108,7 @@ module.exports = function () {
 
 		// Add major modules to the application object.
 		var tbe = app.tbe;
+
 
 		app.overlays = require('./overlays/overlays.js').init();
 		// a bit of a hack???
@@ -209,7 +210,8 @@ module.exports = function () {
 				var currentDocText = app.teaktext.blocksToText(tbe.forEachDiagramChain);
 				app.storage.setItem(tbe.currentDoc, currentDocText);
 			},
-			'calibrate': 'calibrationOverlay'
+			'calibrate': 'calibrationOverlay',
+      'tutorialOverlay': 'tutorialOverlay'
 		};
 
 		// Construct the clipboard
@@ -255,6 +257,7 @@ module.exports = function () {
 			{ 'alignment': 'M', 'label': fastr.file, 'command': 'pages', 'sub': buttonsPages },
 			{ 'alignment': 'M', 'label': fastr.edit, 'command': 'edit', 'sub': buttonsEdit },
 			{ 'alignment': 'M', 'label': fastr.calibrate, 'command': 'calibrate' },
+      { 'alignment': 'M', 'label': fastr.tutorial, 'command': 'tutorialOverlay' },
 			{ 'alignment': 'R', 'label': '', 'command': 'deviceScanOverlay' },
 		];
 

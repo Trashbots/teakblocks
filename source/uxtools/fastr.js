@@ -53,6 +53,7 @@ module.exports = function factory(){
       loop: '\uf2ea',
       data: '\uf080',
       calibrate: '\uf24e', //f013 - settings // f24e - scale //f140 - target
+      tutorial: '\uf128', // make this the '?' symbol
       batteryFull: '\uf240',
       batteryThreeQuarters: '\uf241',
       batteryHalf: '\uf242',

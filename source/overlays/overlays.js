@@ -47,6 +47,7 @@ module.exports = function () {
       screens.fileOverlay = require('./fileOverlay.js');
       screens.splashOverlay = require('./splashOverlay.js');
       screens.calibrationOverlay = require('./calibrationOverlay.js');
+      screens.tutorialOverlay = require('./tutorialOverlay.js');
       overlays.screens = screens;
 
       return overlays;

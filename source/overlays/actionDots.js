@@ -96,7 +96,7 @@ module.exports = function () {
     // System basically makes room for 10 dots.
     // some from right, some from left, some in the center.
     // Still a bit hard coded.
-    var slotw = w * 0.1;
+    var slotw = w * 0.094;
     var edgeSpacing = 7;
     var x = 0;
     var dotd = 66;   // diameter
