@@ -157,18 +157,18 @@ module.exports = function () {
     this.svgText2 = null;
     this.dotDiameter = dotd;
     this.dopTop = y;
-    
+
     var svgDG = svgb.createGroup('action-dot', 0, 0);
     var label = this.label;
     var dotHalf = dotd/2;
     var fontY = y + dotHalf + (fontSize / 3);
-    
+
     //console.log(dso.robotOnlyPos)
     //Check if character strings are more than one character to create a label on top of the usual label
     if (this.command === 'deviceScanOverlay') {
 
-      
-      
+
+
       // For the connect label put the device name
       var buttonWidth = (170 * scale);
       var buttonLeft = x - buttonWidth - 20;
@@ -186,11 +186,11 @@ module.exports = function () {
       this.batteryText = svgb.createText('fa fas action-dot-fatext', buttonCenter + buttonWidth/6, y + dotd*0.75 + (fontSize / 3), "");
       this.batteryText.setAttribute('id', 'battery-label');
 
-      
+
       editStyle.setFontSize(this.svgText.style, fontSize*1);
       editStyle.setFontSize(this.batteryText.style, fontSize*0.95);
       editStyle.setFontSize(this.nameText.style, fontSize*0.8);
-      
+
     } else if (this.label === fastr.file) {
       // For files its the doc icon with letter inside.
       this.svgDot = svgb.createCircle('action-dot-bg', x + dotHalf, y + dotHalf, dotHalf);
@@ -204,7 +204,7 @@ module.exports = function () {
       this.svgText = svgb.createText('fa action-dot-fatext fas', x + dotHalf + this.tweakx, fontY, label);
       editStyle.setFontSize(this.svgText.style, fontSize);
     }
-    
+
     this.svgDot.setAttribute('id', 'action-dot-' + this.command);
     svgDG.appendChild(this.svgDot);
     svgDG.appendChild(this.svgText);
@@ -411,6 +411,11 @@ module.exports = function () {
   };
 
   actionDots.doPointerEvent = function(event) {
+    // if tutorial is active, ignore
+    if (app.isShowingTutorial) {
+      return;
+    }
+
     var elt = document.elementFromPoint(event.clientX, event.clientY);
     var t = event.type;
     var adi = actionDots.activeIndex;
@@ -457,6 +462,9 @@ module.exports = function () {
     interact('.action-dot', {context:svg})
     .draggable({})
     .on('down', function (event) {
+      if (app.isShowingTutorial) {
+        return;
+      }
       var dotIndex = event.currentTarget.getAttribute('dotIndex');
       actionDots.activeIndex = dotIndex;
       actionDots.dotMap[dotIndex].activate(1);

@@ -1492,18 +1492,32 @@ module.exports = function () {
 
 		tbe.tabGroups = [];
 		tbe.tabGroups['start'] = tbe.dropAreaGroup.childNodes[0];
-		tbe.tabGroups['fx'] = tbe.dropAreaGroup.childNodes[1];
+		tbe.tabGroups['action'] = tbe.dropAreaGroup.childNodes[1];
 		tbe.tabGroups['control'] = tbe.dropAreaGroup.childNodes[2];
 
 		// For event routing.
 		tbe.tabGroups['start'].setAttribute('group', 'start');
-		tbe.tabGroups['fx'].setAttribute('group', 'fx');
+		tbe.tabGroups['action'].setAttribute('group', 'action');
 		tbe.tabGroups['control'].setAttribute('group', 'control');
 	};
 
 	tbe.switchTabs = function (group) {
 		// This moves the tab background to the front.
 		this.clearStates();
+		var tab = tbe.tabGroups[group];
+		this.dropArea = tab;
+		tbe.dropAreaGroup.appendChild(tab);
+		tbe.showTabGroup(group);
+	};
+
+	tbe.switchTabsTutorial = function (group) {
+		// This moves the tab background to the front.
+    // soft clearStates
+		actionDots.reset();
+		// app.overlays.hideOverlay(null);
+		this.components.blockSettings.hide();
+		tbe.forEachDiagramBlock(function (b) { b.markSelected(false); });
+
 		var tab = tbe.tabGroups[group];
 		this.dropArea = tab;
 		tbe.dropAreaGroup.appendChild(tab);

@@ -32,7 +32,7 @@ module.exports = function(){
   var overlays = require('./overlays.js');
   var dots = require('./actionDots.js');
 
-  var cdots = dots.commandDots;
+  app.isShowingTutorial = false;
 
   function TutorialPage(name, titleText, aboutText) {
     return {
@@ -88,6 +88,7 @@ module.exports = function(){
 
   // External function for putting it all together.
   tutorialOverlay.start = function () {
+    app.isShowingTutorial = true;
 
     overlays.insertHTML(`
         <style id='tutorial-text-id'>
@@ -174,13 +175,15 @@ module.exports = function(){
     if (page.name.includes("-dot-")) {
       var dotName = page.name.substring(0, page.name.indexOf("-"));
       // console.log("Dot page", dotName);
-      cdots[dotName].activate(3);
+      dots.commandDots[dotName].activate(3);
     }
 
     if (page.name.includes("-palette-")) {
       var paletteName = page.name.substring(0, page.name.indexOf("-"));
       // console.log("Palette page", paletteName);
-  		// tbe.switchTabsTutorial(paletteName);
+      // tbe.showTabGroup(paletteName);
+      // tbe.switchTabs(paletteName)
+  		tbe.switchTabsTutorial(paletteName);
       // show background
       tutorialOverlayHTML.style.backgroundColor = "transparent";
     } else {
@@ -196,7 +199,7 @@ module.exports = function(){
   }
 
   tutorialOverlay.deactivateAllButtons = function() {
-    for (let val of Object.values(cdots)) {
+    for (let val of Object.values(dots.commandDots)) {
       val.activate(0);
     }
   }
@@ -216,6 +219,7 @@ module.exports = function(){
   }
 
   tutorialOverlay.exit = function () {
+    app.isShowingTutorial = false;
   };
 
   tutorialOverlay.showLaunchAboutBox = function() {
