@@ -1079,16 +1079,33 @@ module.exports = function () {
 	};
 
 	tbe.identityAutoPlace = function identityAutoPlace(block) {
-		tbe.forEachDiagramBlock(function (compare) {
-			//console.log("compare", tbe.intersectingArea(compare, block));
-			if (tbe.intersectingArea(compare, block) > 100 && compare !== block && block.bottom + 120 < tbe.height - 150) {
-				block.dmove(0, 120);
-				tbe.identityAutoPlace(block);
-				return;
-			} else if (block.bottom + 120 > tbe.height - 100) {
-				tbe.deleteChunk(block, block);
-			}
-		});
+    while (block.bottom + 120 <= tbe.height - 100) {
+      // check if intersecting
+      var signal = {valid : true};
+      tbe.forEachDiagramBlock(function(compare) {
+        if (tbe.intersectingArea(compare, block) > 100 && compare !== block && block.bottom + 120 < tbe.height - 150) {
+          signal.valid = false;
+  				return;
+  			}
+      })
+      if (signal.valid) {
+        return;
+      } else {
+        block.dmove(0, 120);
+      }
+    }
+    tbe.deleteChunk(block, block);
+
+		// tbe.forEachDiagramBlock(function (compare) {
+		// 	//console.log("compare", tbe.intersectingArea(compare, block));
+		// 	if (tbe.intersectingArea(compare, block) > 100 && compare !== block && block.bottom + 120 < tbe.height - 150) {
+		// 		block.dmove(0, 120);
+		// 		tbe.identityAutoPlace(block);
+		// 		return;
+		// 	} else if (block.bottom + 120 > tbe.height - 100) {
+		// 		tbe.deleteChunk(block, block);
+		// 	}
+		// });
 	};
 
 	tbe.keyEvent = function (e) {
