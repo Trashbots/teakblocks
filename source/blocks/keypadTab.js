@@ -26,6 +26,9 @@ module.exports = function () {
     var ko = require('knockout');
     var keypad = {};
 
+    keypad.isBeatsOpen = false;
+    keypad.isNumericOpen = false;
+
     keypad.tabbedButtons = function(div, object){
       object.inner =
           `<div id='keypadDiv' class='editorDiv'>
@@ -47,6 +50,12 @@ module.exports = function () {
       var beatsDisplay = document.getElementById('beats-display');
       var numericDisplay = document.getElementById('numeric-display');
       beatsDisplay.onclick = function(){
+        if (keypad.isBeatsOpen) {
+          return;
+        }
+        keypad.isBeatsOpen = true;
+        keypad.isNumericOpen = false;
+
         var buttons = document.getElementsByClassName('dataButton');
         beatsDisplay.className += " selectedDisplay";
         numericDisplay.className = "numeric-display-half svg-clear";
@@ -60,6 +69,12 @@ module.exports = function () {
       };
 
       numericDisplay.onclick = function(){
+        if (keypad.isNumericOpen) {
+          return;
+        }
+        keypad.isBeatsOpen = false;
+        keypad.isNumericOpen = true;
+
         var buttons = document.getElementsByClassName('beatsButton');
         numericDisplay.className += " selectedDisplay";
         beatsDisplay.className = "beats-display svg-clear";
@@ -279,6 +294,8 @@ module.exports = function () {
       };
 
     keypad.closeTabs = function createKeyPad(div){
+      keypad.isBeatsOpen = false;
+      keypad.isNumericOpen = false;
       ko.cleanNode(div);
     };
     return keypad;
