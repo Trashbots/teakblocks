@@ -85,6 +85,9 @@ module.exports = function () {
 	tbe.clearStates = function clearStates(block) {
 		// Clear any showing forms or multi step state.
 		// If the user has interacted with a general part of the editor.
+    if (app.isShowingTutorial) {
+      return;
+    }
 		actionDots.reset();
 		app.overlays.hideOverlay(null);
 		this.components.blockSettings.hide(block);
@@ -1260,13 +1263,22 @@ module.exports = function () {
 		interact('.drag-group')
 			// Pointer events.
 			.on('down', function (event) {
+        if (app.isShowingTutorial) {
+          return;
+        }
 				tbe.pointerDownObject = event.target;
 			})
 			.on('tap', function (event) {
 				var block = thisTbe.elementToBlock(event.target);
 				if (block !== null && block.isPaletteBlock) {
 					// Tapping on an palette item will place it on the sheet.
-					tbe.autoPlace(block);
+          var tutorialOverlay = require("./overlays/tutorialOverlay.js");
+          if (app.isShowingTutorial) {
+            var block = thisTbe.elementToBlock(event.target);
+            tutorialOverlay.showBlockDetails(block);
+          } else {
+            tbe.autoPlace(block);
+          }
 				} else {
 					// Tapping on diagram block brings up a config page.
 					actionDots.reset();
@@ -1274,6 +1286,9 @@ module.exports = function () {
 				}
 			})
 			.on('up', function (event) {
+        if (app.isShowingTutorial) {
+          return;
+        }
 				var block = thisTbe.elementToBlock(event.target);
 				if (block.rect.top > tbe.height - 100 && !block.isPaletteBlock) {
 					event.interaction.stop();
@@ -1290,6 +1305,9 @@ module.exports = function () {
 				}
 			})
 			.on('move', function (event) {
+        if (app.isShowingTutorial) {
+          return;
+        }
 				try {
 					var interaction = event.interaction;
 					var block = thisTbe.elementToBlock(event.target);
@@ -1520,6 +1538,9 @@ module.exports = function () {
 
 	tbe.switchTabs = function (group) {
 		// This moves the tab background to the front.
+    if (app.isShowingTutorial) {
+      return;
+    }
 		this.clearStates();
 		var tab = tbe.tabGroups[group];
 		this.dropArea = tab;

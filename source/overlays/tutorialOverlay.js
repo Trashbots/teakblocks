@@ -32,57 +32,12 @@ module.exports = function(){
   var overlays = require('./overlays.js');
   var dots = require('./actionDots.js');
 
+  var tutorialData = require('./tutorialData.js');
+
+  var tutorialPages = tutorialData.pages;
+  var tutorialBlockPages = tutorialData.blockPages;
+
   app.isShowingTutorial = false;
-
-  function TutorialPage(name, titleText, aboutText) {
-    return {
-      "name": name,
-      "titleText": titleText,
-      "aboutText": aboutText
-    }
-  }
-
-  var tutorialPages = [
-    TutorialPage('intro-page',
-      'TBlocks Tutorial - Introduction',
-      'Welcome to the tutorial for TBlocks!'),
-    TutorialPage('play-dot-page',
-      'TBlocks Tutorial - Play Button',
-      'This is the play button.'),
-    TutorialPage('stop-dot-page',
-      'TBlocks Tutorial - Stop Button',
-      'This is the stop button.'),
-    TutorialPage('driveOverlay-dot-page',
-      'TBlocks Tutorial - Drive Button',
-      'This is the drive button.'),
-    TutorialPage('debugOverlay-dot-page',
-      'TBlocks Tutorial - Debug Button',
-      'This is the debug button.'),
-    TutorialPage('pages-dot-page',
-      'TBlocks Tutorial - Pages Button',
-      'This is the pages button.'),
-    TutorialPage('edit-dot-page',
-      'TBlocks Tutorial - Edit Button',
-      'This is the edit button.'),
-    TutorialPage('calibrate-dot-page',
-      'TBlocks Tutorial - Calibrate Button',
-      'This is the calibrate button.'),
-    TutorialPage('tutorialOverlay-dot-page',
-      'TBlocks Tutorial - Tutorial Button',
-      'This is the tutorial button.'),
-    TutorialPage('deviceScanOverlay-dot-page',
-      'TBlocks Tutorial - Device Scan Button',
-      'This is the device scan button.'),
-    TutorialPage('start-palette-page',
-      'TBlocks Tutorial - Start Palette',
-      'This is the start palette.'),
-    TutorialPage('action-palette-page',
-      'TBlocks Tutorial - Action Palette',
-      'This is the action palette.'),
-    TutorialPage('control-palette-page',
-      'TBlocks Tutorial - Control Palette',
-      'This is the control palette.')
-  ];
 
   var curPageIndex = 0;
 
@@ -99,12 +54,15 @@ module.exports = function(){
               <p id="tutorial-title" class='tutorial-title'></p>
               <p id = 'tutorial-about' class='tutorial-body tutorial-text'></p>
               <br>
-            <div align='center'>
-                <button id='tutorial-prev' class='tutorial-button tutorial-text'>Previous Page</button>
-                <button id='tutorial-next' class='tutorial-button tutorial-text'>Next page</button>
-                <button id='tutorial-skip' class='tutorial-button tutorial-text'>Skip tutorial</button>
-            </div>
-            <br>
+              <div align='center'>
+                  <button id='tutorial-prev' class='tutorial-button tutorial-text'>Previous Page</button>
+                  <button id='tutorial-next' class='tutorial-button tutorial-text'>Next page</button>
+                  <button id='tutorial-end' class='tutorial-button tutorial-text'>End tutorial</button>
+              </div>
+              <br>
+              <p id="tutorial-block-title" class='tutorial-title'></p>
+              <p id = 'tutorial-block-about' class='tutorial-body tutorial-text'></p>
+              <br>
             </div>
         </div>`);
 
@@ -118,8 +76,8 @@ module.exports = function(){
     nextButton.onclick = tutorialOverlay.nextTutorial;
 
     // Exit simply go back to editor.
-    var skipButton = document.getElementById('tutorial-skip');
-    skipButton.onclick = tutorialOverlay.skipTutorial;
+    var endButton = document.getElementById('tutorial-end');
+    endButton.onclick = tutorialOverlay.endTutorial;
 
     tutorialOverlay.showTutorialPage(0);
     tutorialOverlay.deactivateAllButtons();
@@ -143,15 +101,43 @@ module.exports = function(){
     for(i = 0; i < elts.length; i++) {
       elts[i].style.height = bh;
     }
+
+    // resize based on tutorial page type (palette vs. non-palette)
+
+    var root = document.getElementById('overlayRoot');
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var scale = editStyle.calcSreenScale(w, h);
+    var baseValue = 80 * scale;
+    var topOffset;
+    var botOffset;
+    if (tutorialPages[curPageIndex].type === "palette") {
+      topOffset = 0;
+      botOffset = 2 * baseValue;;
+    } else {
+      topOffset = baseValue;
+      botOffset = 0;
+    }
+    var tstr = topOffset.toString() + 'px';
+    var hstr = "calc(100% - " + (topOffset + botOffset).toString() + "px)";
+    root.style.height = hstr;
+    root.style.top = tstr;
+
+
+    var dialog = document.getElementById("tutorialDialog");
+    dialog.style.top = "calc(4% + " + (baseValue - topOffset).toString() + "px)";
+    console.log("DIALOG", dialog.style.top);
   };
 
   tutorialOverlay.prevTutorial = function() {
     // console.log("prevTutorial");
+    tutorialOverlay.deselectPaletteBlocks();
     tutorialOverlay.showTutorialPage(curPageIndex - 1);
   }
 
   tutorialOverlay.nextTutorial = function() {
     // console.log("nextTutorial");
+    tutorialOverlay.deselectPaletteBlocks();
     tutorialOverlay.showTutorialPage(curPageIndex + 1);
   }
 
@@ -169,26 +155,19 @@ module.exports = function(){
     tutorialTitle.innerHTML += " (" + (curPageIndex + 1) + "/" + tutorialPages.length + ")";
     tutorialAbout.innerHTML = page.aboutText;
 
-    var tutorialOverlayHTML = document.getElementById("tutorialOverlay");
+    //resize
+    tutorialOverlay.resize();
+
     // if tutorial page for dot, highlight the dot
+    var tutorialOverlayHTML = document.getElementById("tutorialOverlay");
     tutorialOverlay.deactivateAllButtons();
-    if (page.name.includes("-dot-")) {
-      var dotName = page.name.substring(0, page.name.indexOf("-"));
-      // console.log("Dot page", dotName);
-      dots.commandDots[dotName].activate(3);
+    if (page.type === "dot") {
+      dots.commandDots[page.name].activate(3);
     }
 
-    if (page.name.includes("-palette-")) {
-      var paletteName = page.name.substring(0, page.name.indexOf("-"));
-      // console.log("Palette page", paletteName);
-      // tbe.showTabGroup(paletteName);
-      // tbe.switchTabs(paletteName)
-  		tbe.switchTabsTutorial(paletteName);
-      // show background
-      tutorialOverlayHTML.style.backgroundColor = "transparent";
-    } else {
-      // hide background
-      tutorialOverlayHTML.style.backgroundColor = "";
+    // switch tabs
+    if (page.type === "palette") {
+      tbe.switchTabsTutorial(page.name);
     }
 
     // enable/disable prev/next buttons
@@ -196,6 +175,10 @@ module.exports = function(){
     var nextButton = document.getElementById('tutorial-next');
     prevButton.disabled = (index == 0);
     nextButton.disabled = (index == tutorialPages.length - 1);
+
+    // reset tutorial block page
+    document.getElementById("tutorial-block-title").innerHTML = "";
+    document.getElementById("tutorial-block-about").innerHTML = "";
   }
 
   tutorialOverlay.deactivateAllButtons = function() {
@@ -204,22 +187,34 @@ module.exports = function(){
     }
   }
 
-  // tutorialOverlay.highlightTab = function(group) {
-  //   var tab = tbe.tabGroups[group];
-  //   console.log(tab);
-  //   tbe.dropArea = tab;
-  //   tbe.dropAreaGroup.appendChild(tab);
-  //   tbe.showTabGroup(group);
-  // }
+  tutorialOverlay.showBlockDetails = function(block) {
+    console.log("showBlockDetails", block);
+    var page = tutorialBlockPages[block.name];
+    // update page information
+    var tutorialBlockTitle = document.getElementById("tutorial-block-title");
+    var tutorialBlockAbout = document.getElementById("tutorial-block-about");
+    tutorialBlockTitle.innerHTML = page.titleText;
+    tutorialBlockAbout.innerHTML = page.aboutText;
+    // highlight only the selected block
+    tutorialOverlay.deselectPaletteBlocks();
+    block.svgRect.classList.add('selected-block');
+  }
 
-  tutorialOverlay.skipTutorial = function() {
-    console.log("skipTutorial");
+  tutorialOverlay.deselectPaletteBlocks = function() {
+    for (let b of document.querySelectorAll(".selected-block")) {
+      b.classList.remove('selected-block');
+    }
+  }
+
+  tutorialOverlay.endTutorial = function() {
+    console.log("endTutorial");
+    app.isShowingTutorial = false;
     tutorialOverlay.deactivateAllButtons();
+    tutorialOverlay.deselectPaletteBlocks();
     overlays.hideOverlay(null);
   }
 
   tutorialOverlay.exit = function () {
-    app.isShowingTutorial = false;
   };
 
   tutorialOverlay.showLaunchAboutBox = function() {

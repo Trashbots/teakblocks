@@ -55,7 +55,7 @@ module.exports = function () {
 
   overlays.insertHTML = function(overlayHTML) {
     var body = `
-    <div id='overlayRoot' style='top:80px; height:calc(100% - 80px);'>
+    <div id='overlayRoot'>
       <div id='overlayShell' >` +
           overlayHTML + `
       </div>
