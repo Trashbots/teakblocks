@@ -72,6 +72,7 @@ module.exports = function () {
 
 
   dso.updateScreenName = function(botName) {
+    console.log("update name", botName)
     dso.deviceName = botName;
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
     // console.log(dso.decoratedName())
@@ -118,6 +119,12 @@ module.exports = function () {
     };
   };
 
+  dso.initTestVars = function(e) {
+    dso.testKeyTCount = 0;
+    dso.testKeyCCount = 0;
+    dso.testBotsShowing = false;
+  }
+
   dso.testButton = function(e) {
     if (e.pageX < 60 && e.pageY < 200 && !dso.testBotsShowing) {
       dso.testBotsShowing = true;
@@ -129,23 +136,27 @@ module.exports = function () {
   };
 
   dso.addTestBots = function() {
+    console.log("Adding test bots");
     var testNames = ['CUPUR', 'CAPAZ', 'FELIX', 'SADOW', 'NATAN', 'GATON', 'FUTOL', 'BATON', 'FILON', 'CAPON'];
     for (var i in testNames) {
       dso.addNewBlock(testNames[i], 0, icons.t55);
     }
+    dso.testBotsShowing = true;
   };
 
   dso.removeAllBots = function() {
+    console.log("Removing all bots");
     dso.tbots = {};
     dso.svg.removeChild(dso.tbotGroup);
     dso.tbotGroup = dso.svg.appendChild(svgb.createGroup('', 0, 0));
+    dso.testBotsShowing = false;
   };
 
-  dso.testKeyTCount = 0;
-  dso.testKeyCCount = 0;
   dso.keyEvent = function(e) {
     if (e.key === 'T') {
-      dso.testKeyTCount +=1;
+      if (dso.testBotsShowing === false) {
+        dso.testKeyTCount +=1;
+      }
     } else if (e.key === 'C') {
       dso.testKeyCCount += 1;
     } else {
@@ -216,7 +227,39 @@ module.exports = function () {
 
     dso.updateLabel();
     dso.updateScreenName(dso.deviceName);
+
+    // setup dragging
+    dso.initDragScroll(dso.svg);
+
+    dso.initTestVars();
   };
+
+  dso.initDragScroll = function() {
+    var shell = document.getElementById("dsoSvgShell");
+    var svg = document.getElementById("dsoSVG");
+    dso.pos = {top: 0, left: 0, x: 0, y: 0};
+    dso.pointerDown = false;
+    interact('.dso-svg-backgound')
+      .on('down', function (event) {
+        dso.pointerDown = true;
+        dso.pos = {
+          left: shell.scrollLeft,
+          top: shell.scrollTop,
+          x: event.clientX,
+          y: event.clientY,
+        }
+      })
+      .on('move', function (event) {
+        if (dso.pointerDown) {
+          var dx = event.clientX - dso.pos.x;
+          var dy = event.clientY - dso.pos.y;
+          shell.scrollTop = dso.pos.top - dy;
+        }
+      })
+      .on('up', function (event) {
+        dso.pointerDown = false;
+      });
+  }
 
   dso.sorryCantDoIt = function() {
     var tb = new tbot.Class(dso.tbotGroup, 100, 20, '-----', icons.sad55);
@@ -230,6 +273,13 @@ module.exports = function () {
     let row = Math.floor(i / w);
     let col = i % w;
     return {x: 20 + (col * 150), y:20 + (row * 150)};
+  };
+
+  // calculates min height of svg based on number of bots needed to be displayed
+  dso.updateSVGHeight = function() {
+    var num = Object.keys(dso.tbots).length;
+    var height = 20 + Math.ceil(num / dso.columns) * 150;
+    document.getElementById('dsoSVG').style.height = height + 'px';
   };
 
   dso.pauseResume = function(active) {
@@ -256,10 +306,14 @@ module.exports = function () {
       var tb = dso.tbots[t];
       tb.setLocation(loc.x, loc.y);
     }
+    // sets height of tbots
+    dso.updateSVGHeight();
   };
 
   // Close the overlay.
   dso.exit = function() {
+    console.log("exit");
+
     document.body.removeEventListener('keydown', dso.keyEvent, false);
 
     interact.debug().defaultOptions._holdDuration = dso.saveHold;
@@ -287,18 +341,22 @@ module.exports = function () {
   };
 
   dso.tryConnect = function(tb) {
+    console.log("tryconnect", tb);
     if (cxn.scanUsesHostDialog()) {
+      console.log("trycon1");
       // In Host dialog mode (used on browsers) a direct connection
       // can be made, so just bring up the host scan. That will
       // disconnect any current as well.
       dso.onScanButton();
     } else if (!tb.selected) {
+      console.log("trycon2");
       // Right now only one connection is allowed
       //tb.setConnectionStatus(cxn.statusEnum.CONNECTING);
       cxn.disconnectAll();
       cxn.connect(tb.name);
       dso.selectDevice(tb.name);
     } else {
+      console.log("trycon3");
       // Just clear this one
       // Only one is connected so use the main button.
       cxn.disconnectAll();
@@ -308,13 +366,16 @@ module.exports = function () {
   dso.onScanButton = function(e) {
     if (cxn.scanUsesHostDialog()) {
       if (cxn.scanning) {
+        console.log("onScanButton1")
         cxn.stopScanning();
         dso.watch.dispose();
         dso.watch = null;
       } else {
+        console.log("onScanButton2")
         dso.onDisconnectButton();
         dso.refreshList(cxn.devices);
         dso.watch = cxn.connectionChanged.subscribe(dso.refreshList);
+        console.log(cxn.devices);
         cxn.startScanning();
       }
     }
@@ -330,12 +391,14 @@ module.exports = function () {
     tb.onclick = function() { dso.tryConnect(tb); };
     tb.setConnectionStatus(status);
     dso.tbots[key] = tb;
+    dso.updateSVGHeight()
     return tb;
   };
 
   // refreshList() -- rebuilds the UI list based on devices the
   // connection manager knows about.
   dso.refreshList = function (bots) {
+    console.log("refreshList");
     var cxnSelectedBot = dso.nonName;
     for (var key in bots) {
       let status = bots[key].status;
