@@ -51,7 +51,12 @@ module.exports = function factory(){
       robot: '\uf544',
       temp: '\uf2c9',
       loop: '\uf2ea',
-      data: '\uf080'
+      data: '\uf080',
+      batteryEmpty: '\uf244',
+      batteryOneQuarter: '\uf243',
+      batteryHalf: '\uff242',
+      batteryThreeQuarters: '\uf241',
+      batteryFull: '\uf240'
     };
 
     return fastr;

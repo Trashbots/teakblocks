@@ -1,16 +1,13 @@
 /*
 Copyright (c) 2019 Trashbots - SDG
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,19 +30,15 @@ module.exports = function () {
   var deviceScanOverlay = {};
   var dso = deviceScanOverlay;
 
-<<<<<<< Updated upstream
-  dso.nonName = '-?-';
-=======
 
-  const fullThreshold = (75+100)/2;
-  const threeQuartersThreshold = (50+75)/2;
-  const halfThreshold = (25+50)/2;
-  const oneQuarterThreshold = (25)/2;
+  const fullThreshold = 80;
+  const threeQuartersThreshold = 60;
+  const halfThreshold = 30;
+  const oneQuarterThreshold = 5;
 
-  var batteryPercentData = [3.61, 3.69, 3.71, 3.73, 3.75, 3.77, 3.79, 3.8, 3.82, 3.84, 3.85, 3.87, 3.91, 3.95, 3.98, 4.02, 4.08, 4.11, 4.15, 4.2];
+  var batteryPercentData = [3.27, 3.61, 3.69, 3.71, 3.73, 3.75, 3.77, 3.79, 3.8, 3.82, 3.84, 3.85, 3.87, 3.91, 3.95, 3.98, 4.02, 4.08, 4.11, 4.2];
 
   dso.nonName = "-?-";
->>>>>>> Stashed changes
   dso.tbots = {};
   dso.deviceName = dso.nonName;
 
@@ -56,10 +49,9 @@ module.exports = function () {
     }
   };
 
-<<<<<<< Updated upstream
   dso.decoratedName = function() {
     return fastr.robot + '  ' + dso.deviceName;
-=======
+  };
 
   dso.getBattery = function() {
     let batteryV = cxn.batterymV/1000;
@@ -71,31 +63,26 @@ module.exports = function () {
         break;
       }
     }
-    console.log("percent", percent);
-    /*if (dso.deviceName === dso.nonName)
-    {
-      return ""
-    }
-    else */if (percent > fullThreshold) {
+
+
+    if (percent >= fullThreshold) {
       return fastr.batteryFull;
-    } else if (percent > threeQuartersThreshold) {
+    } else if (percent >= threeQuartersThreshold) {
       return fastr.batteryThreeQuarters;
-    } else if (percent > halfThreshold) {
+    } else if (percent >= halfThreshold) {
       return fastr.batteryHalf;
-    } else if (percent > oneQuarterThreshold) {
+    } else if (percent >= oneQuarterThreshold) {
       return fastr.batteryOneQuarter;
     } else {
       return fastr.batteryEmpty;
     }
->>>>>>> Stashed changes
   };
 
   dso.updateScreenName = function(botName) {
     dso.deviceName = botName;
     dso.disconnectButton.disabled = (dso.deviceName === dso.nonName);
-<<<<<<< Updated upstream
     dso.deviceNameLabel.innerHTML = dso.decoratedName();
-=======
+
 
     if (cxn.versionNumber >= 11 && dso.deviceName !== dso.nonName && cxn.batterymV !== null) { // must update battery too
       dso.deviceNameLabel.innerHTML = fastr.robot;
@@ -112,7 +99,6 @@ module.exports = function () {
   		cxn.botName = null;
   	}
     //console.log(dso.deviceNameLabel.innerHTML)
->>>>>>> Stashed changes
   };
 
   dso.updateLabel = function() {
@@ -225,7 +211,9 @@ module.exports = function () {
     dso.interact = interact('.dso-svg-backgound', {context:dso.svg})
       .on('hold', function(e) { dso.testButton(e); } )
     dso.deviceNameLabel = document.getElementById('device-name-label');
-
+    dso.batteryLabel = document.getElementById('battery-label');
+    console.log(dso.batteryLabel);
+    dso.actualNameLabel = document.getElementById('actual-name-label');
     if (!cxn.isBLESupported()) {
       dso.sorryCantDoIt();
     }

@@ -19,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
 module.exports = function () {
   var actionDots = {};
   var interact = require('interact.js');
@@ -28,25 +27,20 @@ module.exports = function () {
   var app = require('./../appMain.js');
   var fastr = require('fastr.js');
   var dso = require('./deviceScanOverlay.js');
-
   // Map of all dots to map SVG dotIndex attribure to JS objects
   actionDots.mapIndex = 0;
   actionDots.dotMap = [];
-
   // Set of top dots after they have been defined.
   actionDots.topDots = [];
   actionDots.commandDots = [];
-
   // How many dots in each region.
   actionDots.dotsLeft = 0;
   actionDots.dotsMiddle = 0;
   actionDots.dotsRight = 0;
-
   // Flag to prevent nested animations, seconds hits bounce off.
   actionDots.isAnimating = false;
   actionDots.currentSubShowing = null;
   actionDots.docTitleSVG = null;
-
   // Construct an action dot object, the object manage the SVGs
   // used by the dot and related dropdown.
   actionDots.ActionDot = function ActionButton (button) {
@@ -54,7 +48,6 @@ module.exports = function () {
     actionDots.dotMap[actionDots.mapIndex] = this;
     this.dotIndex = actionDots.mapIndex;
     actionDots.mapIndex += 1;
-
     this.command = button.command;
     this.label = button.label;
     this.alignment = button.alignment;
@@ -65,13 +58,11 @@ module.exports = function () {
     if (this.tweakx === undefined) {
       this.tweakx = 0;
     }
-
     this.svgDot = null;
     this.svgDotGroup = null;
     this.svgSubGroup = null;
     this.sub = button.sub;
     this.subShowing = false;
-
     if (button.alignment === 'L') {
       this.position = actionDots.dotsLeft;
       actionDots.dotsLeft += 1;
@@ -82,7 +73,6 @@ module.exports = function () {
       this.position = actionDots.dotsRight;
       actionDots.dotsRight += 1;
     }
-
     this.subDots = [];
     if (this.sub !== undefined) {
       for(var i = 0; i < this.sub.length; i++) {
@@ -90,10 +80,8 @@ module.exports = function () {
       }
     }
   };
-
   // resize adjust al SVGs to match the screen sizePaletteToWindow
   actionDots.resize = function (w, h) {
-
     // System basically makes room for 10 dots.
     // some from right, some from left, some in the center.
     // Still a bit hard coded.
@@ -101,14 +89,12 @@ module.exports = function () {
     var edgeSpacing = 7;
     var x = 0;
     var dotd = 66;   // diameter
-
     // Shrink if page is too short or too wide.
     // Need to add width check.
     var scale = editStyle.calcSreenScale(w, h);
     var y = edgeSpacing * scale;
     var half = (w / 2) - (dotd / 2);
     var mid = half - ((actionDots.dotsMiddle + 1) * (slotw / 2));
-
     // The action-dot class is used for event dispatching. The overall
     // group, but not the the interior items should have this class
     for (var i = 0; i < actionDots.topDots.length; i++) {
@@ -126,20 +112,17 @@ module.exports = function () {
       actionDots.topDots[i].updateSvg(x, y, scale);
     }
   };
-
   actionDots.setDocTitle = function(newName) {
     if (actionDots.docTitleSVG !== null) {
       actionDots.docTitleSVG.textContent = newName;
     }
   };
-
   // Create an image for the block base on its type.
   actionDots.ActionDot.prototype.updateSvg = function(x, y, scale) {
     // x and y are top left
     // scale allos for small window (or devics)
     var dotd = 66 * scale;        // dot diameter
     var fontSize = 34 * scale;
-
     // Remove exisiting dot group if it exists
     if (this.svgDotGroup !== null) {
       if (this.svgSubGroup !== null && this.subShowing) {
@@ -156,32 +139,24 @@ module.exports = function () {
     this.svgText2 = null;
     this.dotDiameter = dotd;
     this.dopTop = y;
-
     var svgDG = svgb.createGroup('action-dot', 0, 0);
     var label = this.label;
     var dotHalf = dotd/2;
     var fontY = y + dotHalf + (fontSize / 3);
 
-<<<<<<< Updated upstream
-    //Check if character strings are more than one character to create a label on top of the usual label
-    if (this.command === 'deviceScanOverlay') {
-=======
     //console.log(dso.robotOnlyPos)
     //Check if character strings are more than one character to create a label on top of the usual label
     if (this.command === 'deviceScanOverlay') {
 
-
-
->>>>>>> Stashed changes
       // For the connect label put the device name
       var buttonWidth = (170 * scale);
       var buttonLeft = x - buttonWidth - 20;
       var buttonCenter = buttonLeft + (80 * scale);
-<<<<<<< Updated upstream
+
       this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
       this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, dso.decoratedName());
       this.svgText.setAttribute('id', 'device-name-label');
-=======
+
       //console.log(svgb.createRect)
       //console.log(buttonLeft + 35*scale)
       dso.robotOnlyPos = buttonLeft+35*scale;
@@ -201,7 +176,6 @@ module.exports = function () {
       editStyle.setFontSize(this.batteryText.style, fontSize*0.95);
       editStyle.setFontSize(this.nameText.style, fontSize*0.8);
 
->>>>>>> Stashed changes
     } else if (this.label === fastr.file) {
       // For files its the doc icon with letter inside.
       this.svgDot = svgb.createCircle('action-dot-bg', x + dotHalf, y + dotHalf, dotHalf);
@@ -213,35 +187,34 @@ module.exports = function () {
       this.svgDot = svgb.createCircle('action-dot-bg', x + dotHalf, y + dotHalf, dotHalf);
       this.svgText = svgb.createText('fa action-dot-fatext fas', x + dotHalf + this.tweakx, fontY, label);
     }
-<<<<<<< Updated upstream
     editStyle.setFontSize(this.svgText.style, fontSize);
-=======
->>>>>>> Stashed changes
 
     this.svgDot.setAttribute('id', 'action-dot-' + this.command);
     svgDG.appendChild(this.svgDot);
     svgDG.appendChild(this.svgText);
-    if (this.svgTextOverlay !== null) {
+    if (this.nameText != null)
+    {
+      svgDG.appendChild(this.nameText);
+    }
+    if (this.batteryText != null) {
+      svgDG.appendChild(this.batteryText);
+    }
+    if (this.svgTextOverlay != null) {
       svgDG.appendChild(this.svgTextOverlay);
     }
     svgDG.setAttribute('dotIndex', this.dotIndex);
     this.svgDotGroup = svgDG;
-
     if (this.sub !== undefined) {
       this.svgSubGroup = this.updateDropdownSvg(x, y, dotd, fontSize);
     }
-
     actionDots.svgDotParent.appendChild(this.svgDotGroup);
   };
-
   // Open up the drop down menu
   // The SVG tree for the drop down is build and saved for use by the event
   // handlers
   actionDots.ActionDot.prototype.updateDropdownSvg = function(x, y, dotd, fontSize) {
-
     var spacing = y; // Spacing from the top edge
     var svgSubGroup = svgb.createGroup('action-dot-dropdown', 0, 0);
-
     var ddWidth = dotd + (2 * spacing);
     // The background for the buttons will be a rounded rect a bit larger than
     // the dots, it wil animate to full length when shown.
@@ -249,9 +222,7 @@ module.exports = function () {
     this.subBackD = ddWidth;
     this.svgSubBack = svgb.createRect('action-dot-dropdown-bg', x-spacing, y-spacing,
       ddWidth, ddWidth, ddWidth/2);
-
     svgSubGroup.appendChild(this.svgSubBack);
-
     // Insert the buttons that go on the drop-down
     var dotTop = y;
     for(var i = 0; i < this.subDots.length; i++) {
@@ -263,24 +234,20 @@ module.exports = function () {
     }
     return svgSubGroup;
   };
-
   actionDots.ActionDot.prototype.buildSubDot = function(x, dotTop, dotTopHide, dotd, fontSize) {
     this.x = x;
     this.dotTop = dotTop;           // where ethe dot shoudl be once shown.
     this.dotTopHide = dotTopHide;   // where the dot hide.
-
     var dothalf = dotd/2;
     var svgDG = svgb.createGroup('action-dot', 0, 0);
     var fontTop = dotTop + dothalf + (fontSize / 3);
     this.svgDot = svgb.createCircle('action-dot-bg', x + dothalf, dotTop + dothalf, dothalf);
     this.svgText = svgb.createText('fa action-dot-fatext', x + dothalf, fontTop, this.label);
     editStyle.setFontSize(this.svgText.style, fontSize);
-
     // ??? What is this ????
     if (this.command === 'copy') {
       //  vgDG.classList.add('copyButton');
     }
-
     this.svgDot.setAttribute('id', 'action-dot-' + this.command);
     svgDG.appendChild(this.svgDot);
     svgDG.appendChild(this.svgText);
@@ -288,7 +255,6 @@ module.exports = function () {
     this.svgDotGroup = svgDG;
     return svgDG;
   };
-
   actionDots.ActionDot.prototype.activate = function(state) {
     // 0 - Back to normal
     // 1 - Highlight mouse-down/finger-press)
@@ -314,14 +280,12 @@ module.exports = function () {
       this.svgText.classList.add('running');
     }
   };
-
   actionDots.hideOverlay = function() {
     if (app.overlays.currentShowing !== null) {
       actionDots.activate(app.overlays.currentShowing, 0);
       app.overlays.hideOverlay(null);
     }
   };
-
   actionDots.ActionDot.prototype.doCommand = function() {
     // Highlight the button hit
     this.activate(2);
@@ -338,7 +302,6 @@ module.exports = function () {
       this.animateDropDown();
     }
   };
-
   actionDots.ActionDot.prototype.animateDropDown = function() {
     if (actionDots.isAnimating)
       return;
@@ -365,22 +328,18 @@ module.exports = function () {
       actionDots.currentSubShowing = null;
     }
   };
-
   // A target location is set for the last dot, each dot will move relative
   // to the position it is in, the background will adjust as well.
   actionDots.ActionDot.prototype.slideDots = function(state, down) {
     var thisDot = this;
-
     // Based on frame calculate a 0.0 to 1.0 fraction
     var f = state.frame / state.frameEnd;
     if (!down) {
       f = 1.0 - f;
     }
-
     // Animate the drop down back ground.
     var h = (this.subBackBottom - this.subBackD) * f;
     this.svgSubBack.setAttribute('height', String(this.subBackD + h) + 'px');
-
     // Animate the dots.
     var numDots = this.subDots.length;
     for(var i = 0; i < numDots; i++) {
@@ -399,7 +358,6 @@ module.exports = function () {
       }
     }
   };
-
   actionDots.reset = function() {
     // Skip the play button since it takes care of its self.
     // TODO refactor, this is over kill, main need is to reset when overlay
@@ -408,14 +366,12 @@ module.exports = function () {
       actionDots.topDots[i].activate(0);
     }
   };
-
   actionDots.activate = function(name, state) {
     var dot = actionDots.commandDots[name];
     if ( dot !== undefined ) {
       dot.activate(state);
     }
   };
-
   actionDots.doPointerEvent = function(event) {
     var elt = document.elementFromPoint(event.clientX, event.clientY);
     var t = event.type;
@@ -437,7 +393,6 @@ module.exports = function () {
       }
     }
   };
-
   actionDots.defineButtons = function(buttons, svg) {
     actionDots.activeIndex = -1;
     actionDots.svgDotParent = svg;
@@ -446,14 +401,12 @@ module.exports = function () {
     // element.
     var base = svgb.createGroup('action-dot', 0, 0);
     svg.appendChild(base);
-
     var i = 0;
     for (i = 0; i < buttons.length; i++) {
       var dot = new this.ActionDot(buttons[i]);
       actionDots.topDots.push(dot);
       actionDots.commandDots[dot.command] = dot;
     }
-
     // Pretty sure there may be an easier way to do this. But in may way interact.js
     // If it simple down and up wiht no move then is come through as a tap.
     // If the pointer/finger moves it is a drag. The drag is better than the move
@@ -478,6 +431,5 @@ module.exports = function () {
     });
     return base;
   };
-
   return actionDots;
 }();
