@@ -346,6 +346,17 @@ module.exports = function factory() {
 		cxn.connectionChanged(cxn.devices);
 	};
 
+  cxn.writeDisconnect = function () {
+    console.log("WRITING DC", cxn.botName);
+    cxn.write(cxn.botName, '(dc)');
+    var count = 0;
+    var intervalID = setInterval(function () {
+      if (++count === 20) {
+        window.clearInterval(intervalID);
+      }
+    }, 50);
+  }
+
 	cxn.disconnectAll = function () {
 		if (cxn.appBLE) {
 			for (var deviceName in cxn.devices) {
@@ -357,12 +368,16 @@ module.exports = function factory() {
 		} else {
 			// More to do here once multiple connectios allowed.
 			if (cxn.webBLEWrite !== null) {
-				var dev = cxn.webBLEWrite.service.device;
-				if (dev.gatt.connected) {
-					dev.gatt.disconnect();
-				}
-				cxn.webBLEWrite = null;
-				cxn.webBLERead = null;
+        cxn.writeDisconnect();
+        setTimeout(function () {
+          var dev = cxn.webBLEWrite.service.device;
+          console.log("here", cxn.botName, cxn.webBLEWrite, cxn.webBLERead);
+          if (dev.gatt.connected) {
+            dev.gatt.disconnect();
+          }
+          cxn.webBLEWrite = null;
+          cxn.webBLERead = null;
+        },1000);
 			}
 		}
 	};
@@ -467,7 +482,14 @@ module.exports = function factory() {
 		log.trace('Error2:', reason);
 	};
 
-	cxn.write = function (name, message) {
+  cxn.write = function (name, message) {
+    cxn.writeHelper (name, message, 0);
+  }
+
+	cxn.writeHelper = function (name, message, retryCount) {
+    if (retryCount >= 3) {
+      return;
+    }
 		if (!cxn.calibrating) {
 			//console.log(cxn.calibrating);
 			try {
@@ -490,11 +512,11 @@ module.exports = function factory() {
 							cxn.webBLEWrite.writeValue(buffer)
 								.then(function () {
 
-									//log.trace('write succeded', message);
+									log.trace('write succeeded', message);
 								})
 								.catch(function () {
-									//log.trace('write failed', message, error);
-									setTimeout(cxn.write(name, message), 50);
+									log.trace('write failed', message);
+									setTimeout(cxn.writeHelper(name, message, retryCount + 1), 50);
 								});
 						}
 						//var cxn.webBLEWrite = null;
