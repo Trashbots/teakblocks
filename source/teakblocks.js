@@ -1618,5 +1618,15 @@ module.exports = function () {
 		// dropAreaGroup.appendChild(tbe.createTabSwitcherButton());
 	};
 
+  tbe.getPaletteBlockByName = function(name) {
+    for (const k in app.tbe.paletteBlocks) {
+      var b = app.tbe.paletteBlocks[k];
+      if (b.name == name) {
+        return b;
+      }
+    }
+    return null;
+  }
+
 	return tbe;
 }();

@@ -56,8 +56,8 @@ module.exports = function(){
               <br>
               <div align='center'>
                   <button id='tutorial-prev' class='tutorial-button tutorial-text'>Previous Page</button>
-                  <button id='tutorial-next' class='tutorial-button tutorial-text'>Next page</button>
-                  <button id='tutorial-end' class='tutorial-button tutorial-text'>End tutorial</button>
+                  <button id='tutorial-next' class='tutorial-button tutorial-text'>Next Page</button>
+                  <button id='tutorial-end' class='tutorial-button tutorial-text'>End Tutorial</button>
               </div>
               <br>
               <p id="tutorial-block-title" class='tutorial-title'></p>
@@ -179,6 +179,17 @@ module.exports = function(){
     // reset tutorial block page
     document.getElementById("tutorial-block-title").innerHTML = "";
     document.getElementById("tutorial-block-about").innerHTML = "";
+
+    // default block selected
+    if (page.type == "palette") {
+      if (page.name == 'start') {
+        tutorialOverlay.showBlockDetails(app.tbe.getPaletteBlockByName('identity'));
+      } else if (page.name == 'action') {
+        tutorialOverlay.showBlockDetails(app.tbe.getPaletteBlockByName('picture'));
+      } else if (page.name == 'control') {
+        tutorialOverlay.showBlockDetails(app.tbe.getPaletteBlockByName('wait'));
+      }
+    }
   }
 
   tutorialOverlay.deactivateAllButtons = function() {
@@ -198,6 +209,12 @@ module.exports = function(){
     // highlight only the selected block
     tutorialOverlay.deselectPaletteBlocks();
     block.svgRect.classList.add('selected-block');
+    // if it is the loop block, highlight both
+    if (block.name == "loop") {
+      app.tbe.getPaletteBlockByName("tail").svgRect.classList.add('selected-block');
+    } else if (block.name == "tail") {
+      app.tbe.getPaletteBlockByName("loop").svgRect.classList.add('selected-block');
+    }
   }
 
   tutorialOverlay.deselectPaletteBlocks = function() {
