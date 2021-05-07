@@ -80,6 +80,11 @@ module.exports = function () {
 			b.svgRect.classList.remove('running-block');
 		});
 
+		if(dso.deviceName != undefined && dso.disconnectButton != undefined){
+			//console.log("YP", dso.deviceName);
+			//dso.updateScreenName();
+		}
+
 		if (conductor.runningBlocks.length > 0) {
 			for (var i = 0; i < conductor.runningBlocks.length; i++) {
 				var block = conductor.runningBlocks[i];
