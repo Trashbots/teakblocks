@@ -149,11 +149,29 @@ module.exports = function () {
 			tbe.currentDoc = docName;
 			var loadedDocText = app.storage.getItem(docName);
 			if (loadedDocText !== null) {
-				teakText.textToBlocks(tbe, loadedDocText);
+				//teakText.textToBlocks(tbe, loadedDocText);
+				tbe.textToBlocks(docName, loadedDocText);
 			}
 			actionDots.setDocTitle(docName.substring(3, 4));
 		}
 	};
+
+	tbe.textToBlocks = function (docName, docText){
+		if (docName === null){
+			docName = tbe.currentDoc;
+		}
+		//teakText.textToBlocks(tbe, docText);
+		try{
+			teakText.textToBlocks(tbe, docText);
+		} catch(error) {
+			var blankDoc = "()";
+
+			tbe.clearStates();
+			tbe.clearDiagramBlocks();
+			app.storage.setItem(docName, blankDoc);
+			teakText.textToBlocks(tbe, blankDoc);
+		}
+	}
 
 	tbe.nextBlockId = function (prefix) {
 		var blockId = prefix + String(tbe.blockIdSequence);
