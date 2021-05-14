@@ -205,7 +205,7 @@ module.exports = function () {
 
 			'settings': function () { tbe.loadSettings(); },
 			'copy': function () { tbe.copyText = app.teaktext.blocksToText(tbe.forEachDiagramChain); },
-			'paste': function () { if (tbe.copyTest !== null) { app.teaktext.textToBlocks(tbe, tbe.copyText); } },
+			'paste': function () { if (tbe.copyTest !== null) { app.tbe.textToBlocks(null, tbe.copyText); } },
 			'save': function () {
 				var currentDocText = app.teaktext.blocksToText(tbe.forEachDiagramChain);
 				app.storage.setItem(tbe.currentDoc, currentDocText);
@@ -272,7 +272,7 @@ module.exports = function () {
 
 		var loadedDocText = app.storage.getItem('docA');
 		if (loadedDocText !== null) {
-			app.teaktext.textToBlocks(tbe, loadedDocText);
+			app.tbe.textToBlocks('docA', loadedDocText);
 		}
 
 		// Add the main command buttons, to left, middle and right locations.
