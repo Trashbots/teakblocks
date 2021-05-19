@@ -85,6 +85,16 @@ module.exports = function () {
       dso.actualNameLabel.innerHTML = dso.deviceName;
     } else {
       dso.deviceNameLabel.innerHTML = fastr.robot + ' ' + dso.deviceName;
+      dso.deviceNameLabel.setAttribute('x', dso.robotAndTextPos);
+      if(dso.batteryLabel != null){
+        dso.batteryLabel.innerHTML = null;
+        dso.batteryLabel = null;
+      }
+      if(dso.actualNameLabel != null){
+        dso.actualNameLabel.innerHTML = null;
+        dso.actualNameLabel = null;
+      }
+
 	}
 	if (dso.deviceName !== dso.nonName) {
 		cxn.botName = dso.deviceName;

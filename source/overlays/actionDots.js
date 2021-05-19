@@ -175,6 +175,7 @@ module.exports = function () {
       var buttonCenter = buttonLeft + (80 * scale);
       //console.log(svgb.createRect)
       //console.log(buttonLeft + 35*scale)
+      dso.robotAndTextPos = buttonCenter;
       dso.robotOnlyPos = buttonLeft+35*scale
       this.svgDot = svgb.createRect('action-dot-bg', buttonLeft, y, buttonWidth, dotd, dotHalf);
       this.svgText = svgb.createText('fa fas action-dot-fatext', buttonCenter, fontY, fastr.robot+" -?-");
