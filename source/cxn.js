@@ -487,7 +487,7 @@ module.exports = function factory() {
   }
 
 	cxn.writeHelper = function (name, message, retryCount) {
-    if (retryCount >= 3) {
+    if (retryCount >= 500) {
       return;
     }
 		if (!cxn.calibrating) {
