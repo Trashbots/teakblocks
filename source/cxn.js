@@ -457,7 +457,7 @@ module.exports = function factory() {
 				cxn.versionNumber = str.substring(4, str.length - 1);
 				console.log('version number:', cxn.versionNumber);
 				if (cxn.botName) {
-					cxn.write(cxn.botName, '(vr)');
+					//cxn.write(cxn.botName, '(vr)');
 				}
 			} else if (str.includes('bt')) {
 				cxn.batteryPercent = str.substring(4, str.length - 1);

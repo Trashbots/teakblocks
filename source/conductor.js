@@ -80,7 +80,7 @@ module.exports = function () {
 			b.svgRect.classList.remove('running-block');
 		});
 
-		if(dso.deviceName != undefined && dso.disconnectButton != undefined){
+		if(dso.deviceName != undefined && dso.batteryLabel != null){
 			//console.log("YP", dso.deviceName);
 			//dso.updateScreenName();
 		}
