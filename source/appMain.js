@@ -93,7 +93,7 @@ module.exports = function () {
 			', platform:' + app.platformId +
 			', screen:(' + w + ', ' + h + ')';
 		log.trace(launchMessage);
-
+		
 		// Once app has started these can be added.
 		document.addEventListener("pause", app.pause, false);
 		document.addEventListener("resume", app.resume, false);
@@ -130,6 +130,36 @@ module.exports = function () {
 		// Initialize knockout databinding for documents DOM
 		tbe.components = {};
 		tbe.components.blockSettings = require('./block-settings.js');
+		
+		tbe.commands = {
+			'play': function () { app.conductor.playAll(); },
+			'stop': function () { app.conductor.stopAll(); },
+			'trash': function () { tbe.clearAllBlocks(); },
+			'pages': function () { tbe.clearStates(); tbe.dropdownButtons = app.dots.showDropdown(buttonsPages, tbe, fastr.folder, 'pages'); },
+			'edit': function () { tbe.clearStates(); tbe.dropdownButtons = app.dots.showDropdown(buttonsEdit, tbe, fastr.edit, 'edit'); },
+			'loadDocA': function () { tbe.loadDoc('docA'); },
+			'loadDocB': function () { tbe.loadDoc('docB'); },
+			'loadDocC': function () { tbe.loadDoc('docC'); },
+			'loadDocD': function () { tbe.loadDoc('docD'); },
+			'loadDocE': function () { tbe.loadDoc('docE'); },
+
+			'docSnapShot': function () { app.overlays.fileOverlay.cameraFlash(); },
+			'driveOverlay': 'driveOverlay',
+			'debugOverlay': 'debugOverlay',
+			'splashOverlay': 'splashOverlay',
+			'deviceScanOverlay': 'deviceScanOverlay',
+
+			'settings': function () { tbe.loadSettings(); },
+			'copy': function () { tbe.copyText = app.teaktext.blocksToText(tbe.forEachDiagramChain); },
+			'paste': function () { if (tbe.copyTest !== null) { app.tbe.textToBlocks(null, tbe.copyText); } },
+			'save': function () {
+				var currentDocText = app.teaktext.blocksToText(tbe.forEachDiagramChain);
+				app.storage.setItem(tbe.currentDoc, currentDocText);
+			},
+			'calibrate': 'calibrationOverlay',
+      		'tutorialOverlay': 'tutorialOverlay'
+		};
+		
 		ko.applyBindings(tbe.components);
 
 		var formsDiv = document.getElementById('tbe-forms');
@@ -137,6 +167,9 @@ module.exports = function () {
 
 		var cookieSheet = document.getElementById('cookieSheet');
 		var cookiesAccepted = app.storage.getItem('cookiesAccepted');
+		
+		app.storage.setItem('tutorialCompleted',"false")
+
 		if ((!isApp) && ((cookiesAccepted === null) || (cookiesAccepted === false))) {
 			cookieSheet.innerHTML = `
         <div id='cookiesGlass'></dev>
@@ -153,6 +186,13 @@ module.exports = function () {
         `;
 			var cookiesButton = document.getElementById('cookiesButton');
 			cookiesButton.onclick = app.hideCookieSheet;
+			
+			//Show Tutorial Here -- Aman 
+			var tutorialCompleted = app.storage.getItem('tutorialCompleted');			
+			if(tutorialCompleted === "false") {
+				app.doCommand('tutorialOverlay');
+			}
+			app.storage.setItem('tutorialCompleted',"true")
 		}
 
 		// Some early experiments. seems to work well for desktop Chrome
@@ -185,34 +225,6 @@ module.exports = function () {
 		];
 
 		tbe.deleteRay = null;
-		tbe.commands = {
-			'play': function () { app.conductor.playAll(); },
-			'stop': function () { app.conductor.stopAll(); },
-			'trash': function () { tbe.clearAllBlocks(); },
-			'pages': function () { tbe.clearStates(); tbe.dropdownButtons = app.dots.showDropdown(buttonsPages, tbe, fastr.folder, 'pages'); },
-			'edit': function () { tbe.clearStates(); tbe.dropdownButtons = app.dots.showDropdown(buttonsEdit, tbe, fastr.edit, 'edit'); },
-			'loadDocA': function () { tbe.loadDoc('docA'); },
-			'loadDocB': function () { tbe.loadDoc('docB'); },
-			'loadDocC': function () { tbe.loadDoc('docC'); },
-			'loadDocD': function () { tbe.loadDoc('docD'); },
-			'loadDocE': function () { tbe.loadDoc('docE'); },
-
-			'docSnapShot': function () { app.overlays.fileOverlay.cameraFlash(); },
-			'driveOverlay': 'driveOverlay',
-			'debugOverlay': 'debugOverlay',
-			'splashOverlay': 'splashOverlay',
-			'deviceScanOverlay': 'deviceScanOverlay',
-
-			'settings': function () { tbe.loadSettings(); },
-			'copy': function () { tbe.copyText = app.teaktext.blocksToText(tbe.forEachDiagramChain); },
-			'paste': function () { if (tbe.copyTest !== null) { app.tbe.textToBlocks(null, tbe.copyText); } },
-			'save': function () {
-				var currentDocText = app.teaktext.blocksToText(tbe.forEachDiagramChain);
-				app.storage.setItem(tbe.currentDoc, currentDocText);
-			},
-			'calibrate': 'calibrationOverlay',
-      'tutorialOverlay': 'tutorialOverlay'
-		};
 
 		// Construct the clipboard
 		var clipboard = new Clipboard('.copy-button', {

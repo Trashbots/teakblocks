@@ -30,7 +30,6 @@ app.isRegularBrowser =
 	document.URL.indexOf('https://') >= -0;
 
 if (!app.isRegularBrowser) {
-
 	// Add view port info dynamically. might help iOS WKWebview
 	var meta = document.createElement('meta');
 	meta.name = 'viewport';
@@ -64,6 +63,7 @@ if (!app.isRegularBrowser) {
 		);
 	} else {
 		app.isCordovaApp = false;
+		console.log('app starting');
 		app.start();
 	}
 }

@@ -54,6 +54,7 @@ module.exports = function () {
 			if (tbe.diagramBlocks.hasOwnProperty(key)) {
 				var block = tbe.diagramBlocks[key];
 				if (typeof block === 'object') {
+					console.log("diagram block: ", block);
 					callBack(block);
 				}
 			}
@@ -1260,6 +1261,7 @@ module.exports = function () {
 		interact('.editor-background')
 			.on('down', function (event) {
 				try {
+					//save here potentially
 					thisTbe.clearStates();
 					teakselection.startSelectionBoxDrag(event);
 				} catch (error) {
