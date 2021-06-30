@@ -168,7 +168,7 @@ module.exports = function () {
 		var cookieSheet = document.getElementById('cookieSheet');
 		var cookiesAccepted = app.storage.getItem('cookiesAccepted');
 		
-		app.storage.setItem('tutorialCompleted',"false")
+		//app.storage.setItem('tutorialCompleted',"false")
 
 		if ((!isApp) && ((cookiesAccepted === null) || (cookiesAccepted === false))) {
 			cookieSheet.innerHTML = `
@@ -188,11 +188,11 @@ module.exports = function () {
 			cookiesButton.onclick = app.hideCookieSheet;
 			
 			//Show Tutorial Here -- Aman 
-			var tutorialCompleted = app.storage.getItem('tutorialCompleted');			
-			if(tutorialCompleted === "false") {
+			//var tutorialCompleted = app.storage.getItem('tutorialCompleted');			
+			//if(tutorialCompleted === "false") {
 				app.doCommand('tutorialOverlay');
-			}
-			app.storage.setItem('tutorialCompleted',"true")
+			//}
+			//app.storage.setItem('tutorialCompleted',"true")
 		}
 
 		// Some early experiments. seems to work well for desktop Chrome
