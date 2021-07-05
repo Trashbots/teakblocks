@@ -133,6 +133,7 @@ teakText.loadJsoTeakBlocks = function(tbe, jsoBlocks, x, y, prev) {
   let firstBlock = null;
   for (i = 0; i < jsoBlocks.length; i++) {
     const blockName = jsoBlocks[i]._0;
+    log.trace('add block called from teaktext', blockname);
     const block = tbe.addBlock(x, y, blockName);
     if (firstBlock === null) {
       firstBlock = block;

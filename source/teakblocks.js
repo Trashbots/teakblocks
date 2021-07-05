@@ -1,16 +1,13 @@
 /*
 Copyright (c) 2020 Trashbots - SDG
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -54,7 +51,6 @@ module.exports = function () {
 			if (tbe.diagramBlocks.hasOwnProperty(key)) {
 				var block = tbe.diagramBlocks[key];
 				if (typeof block === 'object') {
-					console.log("diagram block: ", block);
 					callBack(block);
 				}
 			}
@@ -86,9 +82,10 @@ module.exports = function () {
 	tbe.clearStates = function clearStates(block) {
 		// Clear any showing forms or multi step state.
 		// If the user has interacted with a general part of the editor.
-    if (app.isShowingTutorial) {
-      return;
-    }
+		if (app.isShowingTutorial) {
+			return;
+		}
+
 		actionDots.reset();
 		app.overlays.hideOverlay(null);
 		this.components.blockSettings.hide(block);
@@ -117,6 +114,8 @@ module.exports = function () {
 			return null;
 		}
 		var values = text.split(':');
+		//log.trace('diagramblocks!!', this.diagramBlocks, values);
+
 		var obj = null;
 		if (values[0] === 'd') {
 			obj = this.diagramBlocks[text];
@@ -181,9 +180,12 @@ module.exports = function () {
 	};
 
 	tbe.addBlock = function (x, y, name) {
+		log.trace("ADDD BLOCK"); //AMAN
 		var block = new this.FunctionBlock(x, y, name);
 		block.isPaletteBlock = false;
 		block.interactId = tbe.nextBlockId('d:');
+		if(block.name === 'loop') {
+		}
 		this.diagramBlocks[block.interactId] = block;
 		return block;
 	};
@@ -293,6 +295,8 @@ module.exports = function () {
 	tbe.replicateChunk = function (chain, endBlock, offsetX, offsetY) {
 
 		this.clearStates(); //???
+
+		log.trace('duplicating', chain,endBlock === null); //AMAN
 
 		var stopPoint = null;
 		if (endBlock !== undefined && endBlock !== null) {
@@ -584,6 +588,7 @@ module.exports = function () {
 		while (block !== null) {
 			block.dragging = state;
 			// block.hilite(state);
+
 			block = block.next;
 		}
 	};
@@ -786,6 +791,7 @@ module.exports = function () {
 
 		// Refine the action based on geometery.
 		if (target !== null) {
+
 			if (self.left <= (target.left)) {
 				if (target.prev !== null) {
 					if (!self.isStartBlock()) { action = 'insert'; }
@@ -921,11 +927,13 @@ module.exports = function () {
 			// TODO:assert that chain we have has clean prev/next links
 			// Append/Prepend the block(chain) to the list
 			if (this.snapAction === 'prepend') {
+				log.trace('prepend',this.snapTarget);
 				assert(this.snapTarget.prev === null, 'err3');
 				targx = this.snapTarget.left - this.chainWidth;
 				thisLast.next = this.snapTarget;
 				this.snapTarget.prev = thisLast;
 			} else if (this.snapAction === 'append') {
+				log.trace('append',this.snapTarget);
 				assert(this.snapTarget.next === null, 'err4');
 				targx = this.snapTarget.right;
 				this.prev = this.snapTarget;
@@ -943,6 +951,17 @@ module.exports = function () {
 				this.prev = this.snapTarget.prev;
 				this.snapTarget.prev.next = this;
 				this.snapTarget.prev = thisLast;
+
+				log.trace('insert',this);
+				//	this.diagramBlocks[this.interactId] = this;
+
+				/*
+				tbe.forEachDiagramBlock(function (key) {
+					if(key.interactId === this.interactId) {
+						log.trace(key);
+					}
+				});
+				*/
 
 				// Set up animation to slide down old blocks.
 				tbe.animateMove(this.snapTarget, this.snapTarget.last, width, 0, 10);
@@ -1289,6 +1308,7 @@ module.exports = function () {
 				tbe.pointerDownObject = event.target;
 			})
 			.on('tap', function (event) {
+				log.trace('tappped');
 				var block = thisTbe.elementToBlock(event.target);
 				if (block !== null && block.isPaletteBlock) {
 					// Tapping on an palette item will place it on the sheet.
@@ -1302,6 +1322,7 @@ module.exports = function () {
 				} else {
 					// Tapping on diagram block brings up a config page.
 					actionDots.reset();
+					log.trace(thisTbe.components);	
 					thisTbe.components.blockSettings.tap(block);
 				}
 			})
@@ -1325,34 +1346,55 @@ module.exports = function () {
 				}
 			})
 			.on('move', function (event) {
-        if (app.isShowingTutorial) {
-          return;
-        }
+				//log.trace('moving rn');
+				if (app.isShowingTutorial) {
+					return;
+				}
 				try {
 					var interaction = event.interaction;
-					var block = thisTbe.elementToBlock(event.target);
+					var block = thisTbe.elementToBlock(event.target); 
 					if (block.name === 'tail') {
 						block = block.flowHead;
 					}
 					// If the pointer was moved while being held down
 					// and an interaction hasn't started yet...
 					if (interaction.pointerIsDown && !interaction.interacting()) {
-						if (tbe.pointerDownObject === event.target) {
+						if (tbe.pointerDownObject === event.target) {						
 							block = tbe.findChunkStart(block);
 							var targetToDrag = block.svgGroup;
 							var notIsolated = (block.next !== null && block.prev !== null);
 							var next = block;
 							var prev = block;
 							if (block.nesting > 0 && notIsolated && !block.isGroupSelected()) {
-								next = block.next;
-								prev = block.prev;
-								block.next.prev = prev;
-								block.prev.next = next;
-								block.next = null;
-								block.prev = null;
-								if (next !== null) {
-									tbe.animateMove(next, next.last, -block.width, 0, 10);
+								var temp_block = block;
+								var nesting = 2;
+								
+								while(temp_block.next.name === 'loop') {
+									nesting += 2;
+									temp_block = temp_block.next;
 								}
+								
+								if(block.name === 'loop') {
+									next = block.flowTail.next;	
+									prev = block.prev;
+									block.flowTail.next.prev = prev;
+									block.prev.next = next;
+									block.flowTail.next = null;
+									block.prev = null;
+									tbe.animateMove(next, next.last, -block.width * nesting, 0, 10);
+								}
+
+								else {
+									next = block.next;
+									prev = block.prev;
+									block.next.prev = prev;
+									block.prev.next = next;
+									block.next = null;
+									block.prev = null;
+									if (next !== null) {
+										tbe.animateMove(next, next.last, -block.width, 0, 10); 
+									}
+								}								
 							} else if (block.nesting > 0 && notIsolated && block.isGroupSelected()) {
 								next = block;
 								prev = block.prev;
@@ -1433,8 +1475,9 @@ module.exports = function () {
 				onmove: function (event) {
 					// Since there is inertia these callbacks continue to
 					// happen after the user lets go.
-
+					
 					var block = thisTbe.elementToBlock(event.target);
+		
 					if (block === null)
 						return;
 					if (!block.dragging) {
