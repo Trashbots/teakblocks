@@ -28,6 +28,8 @@ module.exports = function () {
   var fastr = require('fastr.js');
   var dso = require('./deviceScanOverlay.js');
 
+  var log = require('log.js'); // For debugging purposes - AMAN
+  
   // Map of all dots to map SVG dotIndex attribure to JS objects
   actionDots.mapIndex = 0;
   actionDots.dotMap = [];
@@ -326,6 +328,7 @@ module.exports = function () {
       // while an overlay is up.
       var cmd = this.command;
       actionDots.reset();
+      //log.trace('4:', cmd, 'called');
       app.doCommand(cmd);
     } else {
       // If it's a pull down the hide any showing overlay first.
@@ -463,6 +466,7 @@ module.exports = function () {
     interact('.action-dot', {context:svg})
     .draggable({})
     .on('down', function (event) {
+      //log.trace('action dot down');
       if (app.isShowingTutorial) {
         return;
       }
@@ -477,6 +481,7 @@ module.exports = function () {
       actionDots.doPointerEvent(event);
     })
     .on('tap', function (event) {
+      //log.trace('action dot tap',event);
       actionDots.doPointerEvent(event);
     });
     return base;

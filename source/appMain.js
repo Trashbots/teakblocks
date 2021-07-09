@@ -291,6 +291,7 @@ module.exports = function () {
 		document.body.onresize = tbe.resize;
 		tbe.resize();
 
+		//log.trace('1: Attach to score editor called');
 		app.conductor.attachToScoreEditor(tbe);
 
 		var showSplashAtAlunch = app.isRegularBrowser;
@@ -304,7 +305,7 @@ module.exports = function () {
 		// Write the current doc state to storage insert
 		// before any command
 		app.tbe.saveCurrentDoc();
-
+		//log.trace('command name', commandName);
 		var cmd = app.tbe.commands[commandName];
 		if (app.overlays.isAnimating) {
 			return;
@@ -326,6 +327,8 @@ module.exports = function () {
 				});
 			}
 		} else if (typeof cmd === 'function') {
+			log.trace('do command called');
+			log.trace(cmd);
 			cmd();
 		} else if (typeof cmd === 'string') {
 			app.dots.activate(cmd, 3);

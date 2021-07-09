@@ -47,6 +47,7 @@ module.exports = function () {
 
 	// Visitor for each block in the diagram
 	tbe.forEachDiagramBlock = function (callBack) {
+		//console.log('diagram blocks', tbe.diagramBlocks);
 		for (var key in tbe.diagramBlocks) {
 			if (tbe.diagramBlocks.hasOwnProperty(key)) {
 				var block = tbe.diagramBlocks[key];
@@ -296,7 +297,7 @@ module.exports = function () {
 
 		this.clearStates(); //???
 
-		log.trace('duplicating', chain,endBlock === null); //AMAN
+		//log.trace('duplicating', chain,endBlock === null); //AMAN
 
 		var stopPoint = null;
 		if (endBlock !== undefined && endBlock !== null) {
@@ -933,7 +934,7 @@ module.exports = function () {
 				thisLast.next = this.snapTarget;
 				this.snapTarget.prev = thisLast;
 			} else if (this.snapAction === 'append') {
-				log.trace('append',this.snapTarget);
+				//log.trace('append',this.snapTarget);
 				assert(this.snapTarget.next === null, 'err4');
 				targx = this.snapTarget.right;
 				this.prev = this.snapTarget;
@@ -952,7 +953,7 @@ module.exports = function () {
 				this.snapTarget.prev.next = this;
 				this.snapTarget.prev = thisLast;
 
-				log.trace('insert',this);
+				//log.trace('insert',this);
 				//	this.diagramBlocks[this.interactId] = this;
 
 				/*
@@ -1216,6 +1217,7 @@ module.exports = function () {
 		} else if (key === 53) {
 			tbe.loadDoc('docE');
 		} else if (key === 80) {
+			log.trace('key pressed');
 			conductor.playAll();
 		} else if (key === 83) {
 			conductor.stopAll();

@@ -76,7 +76,9 @@ module.exports = function () {
     domRoot.appendChild(blockSettings.groupDiv);
 
     for(var i = 0; i < 2; i++){ // To process through commonDiv and groupDiv
+      //log.trace(document.getElementsByClassName('block-run')[i]);
       document.getElementsByClassName('block-run')[i].onclick = function() {
+        log.trace('i thing',i);
         conductor.playOne(blockSettings.activeBlock);
       };
       document.getElementsByClassName('block-clone')[i].onclick = blockSettings.cloneGroup;

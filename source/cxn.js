@@ -455,7 +455,7 @@ module.exports = function factory() {
 				cxn.temperature = fData;
 			} else if (str.includes('vs')) {
 				cxn.versionNumber = str.substring(4, str.length - 1);
-				console.log('version number:', cxn.versionNumber);
+				//console.log('version number:', cxn.versionNumber);
 				if (cxn.botName) {
 					//cxn.write(cxn.botName, '(vr)');
 				}
@@ -512,10 +512,10 @@ module.exports = function factory() {
 							cxn.webBLEWrite.writeValue(buffer)
 								.then(function () {
 
-									log.trace('write succeeded', message);
+									//log.trace('write succeeded', message);
 								})
 								.catch(function () {
-									log.trace('write failed', message);
+									//log.trace('write failed', message);
 									setTimeout(cxn.writeHelper(name, message, retryCount + 1), 50);
 								});
 						}

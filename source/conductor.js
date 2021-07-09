@@ -40,6 +40,8 @@ module.exports = function () {
 	conductor.run = false;
 	conductor.soundCount = 0;
 
+	var stopped = false;
+
 	// Once the conductor system is connected to the editor,
 	// it will ping the target device to determine its current state.
 	// Scan the editor looking for identity blocks
@@ -47,6 +49,7 @@ module.exports = function () {
 	conductor.activeBits = [];
 
 	conductor.attachToScoreEditor = function (tbe) {
+		log.trace('2: attach to score editor called');
 		conductor.tbe = tbe;
 		conductor.linkHeartBeat();
 		conductor.cxn.connectionChanged.subscribe(conductor.updateIndentityBlocks);
@@ -55,6 +58,7 @@ module.exports = function () {
 	// If there is a change in connections update the indentity blocks
 	// TODO this linkage is very much a bit of a hack.
 	conductor.updateIndentityBlocks = function () {
+		log.trace('update identity blocks');
 		var blockChainIterator = conductor.tbe.forEachDiagramChain;
 		blockChainIterator(function (chainStart) {
 			if (chainStart.name.startsWith('identity')) {
@@ -70,6 +74,7 @@ module.exports = function () {
 	};
 
 	conductor.linkHeartBeat = function () {
+		log.trace('linkHeartBeat called', conductor.runningBlocks.length);
 		let duration = 1000;
 		var botName = dso.deviceName;
 		conductor.hbTimer = 0;
@@ -88,25 +93,45 @@ module.exports = function () {
 		if (conductor.runningBlocks.length > 0) {
 			for (var i = 0; i < conductor.runningBlocks.length; i++) {
 				var block = conductor.runningBlocks[i];
+				//block = conductor.runningBlocks[i];
+				log.trace('inside linkheartbeat loop');
+
 				if (block !== null) {
+					log.trace('inside linkheartbeat loop',block, conductor.loopCount, typeof conductor.loopCount, conductor.loopCount == 1, block.name === 'tail', block.name === 'tail' && conductor.loopCount == 1);
 					if (conductor.loopCount === undefined && block.isLoopHead()) {
 						conductor.loopCount = block.controllerSettings.data.duration;
+						log.trace('loopCount set', conductor.loopCount, typeof conductor.loopCount);
 					}
 
 					if (block.name === 'tail' && conductor.loopCount > 1) {
-						block = block.flowHead;
 						conductor.loopCount -= 1;
-					} else if (block.name === 'tail' && conductor.loopCount === 1) {
+						//if(conductor.loopCount !== 1) {
+							block = block.flowHead;
+						//}
+						log.trace('reached the tail, decreasing loopcount:', conductor.loopCount);
+						conductor.runningBlocks[i] = block;
+						log.trace('block reset back to head of for loop',block);
+					} else if (block.name === 'tail' && conductor.loopCount == 1) {
+						log.trace('tail and loopcount is 1');
 						conductor.loopCount = undefined;
 						if (block.next !== null) {
+							log.trace('block.next isnt null');
 							block = block.next;
+							if(block.name === 'loop') {
+								conductor.loopCount = block.controllerSettings.data.duration;
+								conductor.runningBlocks[i] = block;
+								log.trace('next loop count:', conductor.loopCount);
+							}
 						} else {
+							log.trace('stopall has been called');
 							conductor.stopAll();
 						}
 					}
 
 					if (block !== null && block.name === 'loop') {
 						block = block.next;
+						//block.count = null;
+						log.trace('block moved to next block', block);
 					}
 
 
@@ -116,9 +141,11 @@ module.exports = function () {
 						let x = conductor.getPrintVal(block.controllerSettings.data); //value
 						duration = (x.toString().length + 1)* 1000; //digits * 1000
 					}
-					if (block.count === null || block.count === undefined) {
+					if (block.count === null || block.count === undefined || stopped) {
+						log.trace(block.count === null, block.count === undefined, stopped);
 						block.count = block.controllerSettings.data.duration;
-
+						log.trace('block.count set', block.count);
+						stopped = false;
 						// if (block.name === 'print') {
 						// 	let x = conductor.getPrintVal(block.controllerSettings.data); //value
 						// 	block.count = x.toString().length; //digits
@@ -130,10 +157,12 @@ module.exports = function () {
 					// If it does not have a duration or it has a duration of 0
 					// then set its duration to 1
 					if (block.count === undefined || block.count === '0') {
+						log.trace('block.count to 1');
 						block.count = 1;
 					}
 
 					if (block !== null) {
+						log.trace('checking block count:', block.count);
 						block.count = parseInt(block.count, 10);
 
 						// Mark the current block as running
@@ -148,10 +177,12 @@ module.exports = function () {
 						// continue playing the block.
 						// Otherwise, get the next block ready and set count to null.
 						conductor.playOne(block);
+						log.trace('playone() called', block.count,block);
 						if (block.count > 1) {
 							block.count -= 1;
 						} else {
 							conductor.runningBlocks[i] = block.next;
+							//log.trace('end of block, pusehd to', conductor.runningBlocks[i]);
 							block.count = null;
 						}
 					}
@@ -171,15 +202,18 @@ module.exports = function () {
 
 	// Find all start all blocks and start them running.
 	conductor.playAll = function () {
+		log.trace('5: Conductor.playall');
 		dots.activate('play', 5);
 		conductor.runningBlocks = [];
 		conductor.run = true;
 		variables.resetVars();
 		var blockChainIterator = conductor.tbe.forEachDiagramChain;
 		blockChainIterator(function (chainStart) {
+			log.trace('chainstart',chainStart);
 			// Ignore chains that don't start with an identity block.
 			if (chainStart.name === 'identity') {
 				conductor.runningBlocks.push(chainStart.next);
+				log.trace('6:',chainStart.next, ' pushed');
 			} else if (chainStart.name === 'identityAccelerometer' || chainStart.name === 'identityButton' || chainStart.name === 'identityTemperature') {
 				//chainStart.controllerSettings.data.run = "yes";
 				cxn.buttonA = null;
@@ -269,13 +303,18 @@ module.exports = function () {
 			}
 		});
 		conductor.count = null;
+		conductor.loopCount = undefined;
+		log.trace('stop all ting:', typeof conductor.loopCount);
 		conductor.runningBlocks = [];
 		conductor.soundCount = 0;
+		//block.count = null;
+		stopped = true;
 		log.trace('stop all');
 		// Single step, find target and head of chain, and run the single block.
 	};
 
 	conductor.playOne = function (block) {
+		//log.trace('playone called',block, block.first);
 		var first = block.first;
 
 		if (first.name.startsWith('identity')) {
@@ -293,6 +332,7 @@ module.exports = function () {
 			} else if (block.name === 'twoMotor') {
 				message = '(m:(1 2) d:' + -d.speed + ');'; // +' b:' + d.duration
 			} else if (block.name === 'sound') {
+				//log.trace('11: sound');
 				// pass the Solfege index
 				message = '(nt:' + d.s.split(" ")[conductor.soundCount] + ');';
 				if (conductor.soundCount === d.duration - 1) {
@@ -300,7 +340,7 @@ module.exports = function () {
 				} else {
 					conductor.soundCount += 1;
 				}
-				console.log('message', message);
+				//console.log('message', message);
 			} else if (block.name === 'wait') {
 				message = '';
 			} else if (block.name === 'variableSet') {
@@ -331,7 +371,7 @@ module.exports = function () {
 				val = cxn.temperature;
 			}
 		}
-		console.log('conductor print', d.print, d.variable, d.sensor, val);
+		//console.log('conductor print', d.print, d.variable, d.sensor, val);
 		return Math.trunc(val); //truncated to an integer
 	};
 
