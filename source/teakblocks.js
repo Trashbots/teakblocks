@@ -1370,21 +1370,31 @@ module.exports = function () {
 							if (block.nesting > 0 && notIsolated && !block.isGroupSelected()) {
 								var temp_block = block;
 								var nesting = 2;
-								
-								while(temp_block.next.name === 'loop') {
-									nesting += 2;
-									temp_block = temp_block.next;
-								}
-								
+								var width = 0;
+
 								if(block.name === 'loop') {
-									next = block.flowTail.next;	
-									prev = block.prev;
-									block.flowTail.next.prev = prev;
-									block.prev.next = next;
-									block.flowTail.next = null;
-									block.prev = null;
-									tbe.animateMove(next, next.last, -block.width * nesting, 0, 10);
-								}
+                                    var temp_block = block;
+                                    var nesting = 0;
+                                    var tail = block.flowTail;
+									var width = 0;
+
+                                    while(temp_block !== tail) {
+                                        log.trace(temp_block,tail);
+                                        nesting += 1;
+										width += temp_block.width;
+                                        temp_block = temp_block.next;
+                                    }
+ 
+                                    nesting +=1;
+									width += temp_block.width;
+                                    next = block.flowTail.next; 
+                                    prev = block.prev;
+                                    block.flowTail.next.prev = prev;
+                                    block.prev.next = next;
+                                    block.flowTail.next = null;
+                                    block.prev = null;
+                                    tbe.animateMove(next, next.last, -width, 0, 10);
+                                }
 
 								else {
 									next = block.next;
