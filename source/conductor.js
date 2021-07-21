@@ -111,7 +111,6 @@ module.exports = function () {
                         if(!nest_completed) {
                             // Update loops count array
                             for(var a in nested_loop_blocks) {
-                                log.trace('a', a);
                                 //don't want the innermost loop to be included in this loop unless theres only one loop
                                 if(nested_loop_counts.length === 1 || nested_loop_blocks[a] === block && a != (nested_loop_counts.length - 1)) {
                                     --nested_loop_counts[a];
@@ -119,13 +118,11 @@ module.exports = function () {
                                     if(a === 0) {
                                         for(var a = 1; a < nested_loop_counts.length; ++a) {
                                             nested_loop_counts[a] = parseInt(nested_loop_blocks[a].controllerSettings.data.duration);
-                                            log.trace('this ting:', nested_loop_counts);
                                             //++nested_loop_counts[a];
                                         }
                                     }
 
                                     var condition = (nested_loop_counts[a] === 0 && a != 0);
-                                    log.trace('condition', condition);
 
                                     if(condition && block.flowTail.next !== null && block.flowTail.next.name !== 'tail') {
                                         block = block.flowTail.next;
@@ -169,30 +166,18 @@ module.exports = function () {
                             log.trace('Break');
                             break;
                         }
-                        //end of nested loops
                         
                         else if(nested_loop_counts[0] <= 0 && nest_exists) {
                             log.trace('2a ii. Outermost loop is at 0.');
                             nest_completed = true;
                             nested = true;
-                            /*
-                            while(nested_loop_blocks[0].flowTail.prev !== nested_loop_blocks[nested_loop_counts.length - 1].flowTail) {
-                                block = nested_loop_blocks[0].flowTail.prev;
-                                nested_loop_blocks[0].flowTail = block;
-                            }
-                            */
                             block = nested_loop_blocks[0].flowTail.next;
                             conductor.helper(block);
                             conductor.runningBlocks[i] = block; 
-
-							//if(loop_exists) {
-							//	nested = true;
-							//}
                         }
 
 						//end of non nested loop
 						else if(nested_loop_counts[0] === 0 && !nest_exists) {
-							//block = block.next;
 							conductor.helper(block);
 							nested = true;
 						}
@@ -200,10 +185,7 @@ module.exports = function () {
 						// on the inner most loop
 						else if(Object.values(nested_loop_blocks)[Object.keys(nested_loop_blocks).length-1]  === block) {
 							log.trace('2a iii. Loop block is the innermost loop');
-							//block = nested_loop_blocks[nested_loop_counts.length - 1];
-							//--nested_loop_counts[nested_loop_counts.length - 1];
                             conductor.loopCount = block.controllerSettings.data.duration; 
-                            //nested_loop_counts[nested_loop_counts.length - 1] = conductor.loopCount;
                             log.trace('loopCount set', conductor.loopCount, typeof conductor.loopCount);
 						}
 
@@ -243,7 +225,6 @@ module.exports = function () {
                             } 
                             
                             if(temp_count == 0) {
-                            //if(temp_count == 1 && block !== nested_loop_blocks[0]) {
                                 block = block.next; //on purpose
                                 conductor.runningBlocks[i] = block;
                                 nested = true;
@@ -257,45 +238,6 @@ module.exports = function () {
                                 log.trace('tail of outer loop arrived, block is now:', block);
                                 nested = true;
                             }
-                            /*
-                            if(block.next !== null && block.next.name === 'loop') {
-                                block = block.next;
-                                conductor.helper(block);
-                                nested = true;
-                                //conductor.loopCount = block.controllerSettings.data.duration;
-                                log.trace('BACK TO BACK FOR LOOPS');
-                                conductor.runningBlocks[i] = block;
-                                log.trace('next loop count:', conductor.loopCount);
-                            }
-
-                            else if(block.next === null) {
-                                var temp_count = -1;
-                                for(var a in nested_loop_blocks) {
-                                    if(nested_loop_blocks[a] === block) {
-                                        temp_count = nested_loop_counts[a];
-                                    }
-                                } 
-                                if(temp_count == 0) {
-                                    block = block.next; //on purpose
-                                    nested = true;
-                                    nest_completed = true;
-                                    nest_exists = false;
-                                }
-
-                                else {
-                                    block = block.flowHead;
-                                    conductor.runningBlocks[i] = block;
-                                    log.trace('tail of outer loop arrived, block is now:', block);
-                                    nested = true;
-                                }
-                            }
-                            
-
-                            else {
-                                block = block.next; //??
-                                conductor.runningBlocks[i] = block;
-                            }
-                            */
                         }
 
                         else if (block.name === 'tail' && conductor.loopCount > 1) {
@@ -368,8 +310,6 @@ module.exports = function () {
                     if(!nested && !nest_completed) {
                         if (block !== null && block.name === 'loop') {
                             block = block.next;
-                            //block.count = null;
-                            //log.trace('block moved to next block', block);
                         }
     
                         // If this is a new block, get its duration
