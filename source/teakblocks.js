@@ -181,7 +181,6 @@ module.exports = function () {
 	};
 
 	tbe.addBlock = function (x, y, name) {
-		log.trace("ADDD BLOCK"); //AMAN
 		var block = new this.FunctionBlock(x, y, name);
 		block.isPaletteBlock = false;
 		block.interactId = tbe.nextBlockId('d:');
@@ -928,13 +927,11 @@ module.exports = function () {
 			// TODO:assert that chain we have has clean prev/next links
 			// Append/Prepend the block(chain) to the list
 			if (this.snapAction === 'prepend') {
-				log.trace('prepend',this.snapTarget);
 				assert(this.snapTarget.prev === null, 'err3');
 				targx = this.snapTarget.left - this.chainWidth;
 				thisLast.next = this.snapTarget;
 				this.snapTarget.prev = thisLast;
 			} else if (this.snapAction === 'append') {
-				//log.trace('append',this.snapTarget);
 				assert(this.snapTarget.next === null, 'err4');
 				targx = this.snapTarget.right;
 				this.prev = this.snapTarget;
@@ -1324,7 +1321,7 @@ module.exports = function () {
 				} else {
 					// Tapping on diagram block brings up a config page.
 					actionDots.reset();
-					log.trace(thisTbe.components);	
+					//log.trace(thisTbe.components);	
 					thisTbe.components.blockSettings.tap(block);
 				}
 			})
@@ -1379,7 +1376,6 @@ module.exports = function () {
 									var width = 0;
 
                                     while(temp_block !== tail) {
-                                        log.trace(temp_block,tail);
                                         nesting += 1;
 										width += temp_block.width;
                                         temp_block = temp_block.next;
